@@ -1,30 +1,47 @@
-// W = White | R = Red | G = Green | O = Orange | B = Blue | Y = Yellow
-type RubiksCubeColor = 'W' | 'R' | 'G' | 'O' | 'B' | 'Y';
-type RubiksCubeRow = [RubiksCubeColor,RubiksCubeColor,RubiksCubeColor];
-type RubiksCubeFace = [RubiksCubeRow,RubiksCubeRow,RubiksCubeRow];
-type RubiksCubeRowPosition = 0 | 1 | 2;
-type RubiksCubeColumnPosition = 0 | 1 | 2;
-export class RubiksCube {
-    static createRubiksCubeFace = (color: RubiksCubeColor): RubiksCubeFace => [[color,color,color],[color,color,color],[color,color,color]];
+import { RubiksCubeFace } from "./RubiksCubeFace";
 
-    upFace: RubiksCubeFace = RubiksCube.createRubiksCubeFace('W');
-    leftFace: RubiksCubeFace = RubiksCube.createRubiksCubeFace('O');
-    frontFace: RubiksCubeFace = RubiksCube.createRubiksCubeFace('G');
-    rightFace: RubiksCubeFace = RubiksCube.createRubiksCubeFace('R');
-    backFace: RubiksCubeFace = RubiksCube.createRubiksCubeFace('B');
-    bottomFace: RubiksCubeFace = RubiksCube.createRubiksCubeFace('Y');
+// W = White | R = Red | G = Green | O = Orange | B = Blue | Y = Yellow
+export type RubiksCubeColor = 'W' | 'R' | 'G' | 'O' | 'B' | 'Y';
+export type RubiksCubeLine = [RubiksCubeColor,RubiksCubeColor,RubiksCubeColor];
+export type RubiksCubeFaceState = [RubiksCubeLine,RubiksCubeLine,RubiksCubeLine];
+
+export const RubiksCubeCenter: RubiksCubePosition = {
+    column: 1,
+    row: 1
+};
+export type RubiksCubeRowPosition = 0 | 1 | 2;
+export type RubiksCubeColumnPosition = 0 | 1 | 2;
+export type RubiksCubePosition = {
+    column: RubiksCubeColumnPosition;
+    row: RubiksCubeRowPosition;
+};
+export class RubiksCube {
+    static createRubiksCubeFace = (color: RubiksCubeColor): RubiksCubeFaceState => [[color,color,color],[color,color,color],[color,color,color]];
+
+    _upFace = new RubiksCubeFace(RubiksCube.createRubiksCubeFace('W'));
+    _leftFace = new RubiksCubeFace(RubiksCube.createRubiksCubeFace('O'));
+    _frontFace = new RubiksCubeFace(RubiksCube.createRubiksCubeFace('G'));
+    _rightFace = new RubiksCubeFace(RubiksCube.createRubiksCubeFace('R'));
+    _backFace = new RubiksCubeFace(RubiksCube.createRubiksCubeFace('B'));
+    _bottomFace = new RubiksCubeFace(RubiksCube.createRubiksCubeFace('Y'));
+    get upFace() {return this._upFace.state}
+    get leftFace() {return this._leftFace.state}
+    get frontFace() {return this._frontFace.state}
+    get rightFace() {return this._rightFace.state}
+    get backFace() {return this._backFace.state}
+    get bottomFace() {return this._bottomFace.state}
     printState() {
-        const printFace = (face: RubiksCubeFace) => {
+        const printFace = (face: RubiksCubeFaceState) => {
             return face.map(row => row.join(' ')).join('\n');
         };
 
-        const upFace = printFace(this.upFace).split('\n').map(row => '         ' + row).join('\n');
-        const bottomFace = printFace(this.bottomFace).split('\n').map(row => '         ' + row).join('\n');
+        const upFace = printFace(this._upFace.state).split('\n').map(row => '         ' + row).join('\n');
+        const bottomFace = printFace(this._bottomFace.state).split('\n').map(row => '         ' + row).join('\n');
 
-        const leftFaceRows = printFace(this.leftFace).split('\n');
-        const frontFaceRows = printFace(this.frontFace).split('\n');
-        const rightFaceRows = printFace(this.rightFace).split('\n');
-        const backFaceRows = printFace(this.backFace).split('\n');
+        const leftFaceRows = printFace(this._leftFace.state).split('\n');
+        const frontFaceRows = printFace(this._frontFace.state).split('\n');
+        const rightFaceRows = printFace(this._rightFace.state).split('\n');
+        const backFaceRows = printFace(this._backFace.state).split('\n');
 
         const middleLayer = leftFaceRows.map((row, i) => '   ' + row + ' ' + frontFaceRows[i] + ' ' + rightFaceRows[i] + ' ' + backFaceRows[i]).join('\n');
 
@@ -32,7 +49,7 @@ export class RubiksCube {
         console.log(middleLayer);
         console.log(bottomFace);
     }
-    private rotateFaceClockwise(face: RubiksCubeFace) {
+    private rotateFaceClockwise(face: RubiksCubeFaceState) {
         const currentFace = structuredClone(face);
 
         face[0][0] = currentFace[2][0];
@@ -47,7 +64,7 @@ export class RubiksCube {
         face[2][2] = currentFace[0][2];
 
     }
-    private rotateFaceCounterClockwise(face: RubiksCubeFace) {
+    private rotateFaceCounterClockwise(face: RubiksCubeFaceState) {
         const currentFace = structuredClone(face);
 
         face[0][0] = currentFace[0][2];
@@ -61,27 +78,26 @@ export class RubiksCube {
         face[2][1] = currentFace[1][0];
         face[2][2] = currentFace[2][0];
     }
-     getRow(position: RubiksCubeRowPosition, face: RubiksCubeFace) {
+     getRow(position: RubiksCubeRowPosition, face: RubiksCubeFaceState) {
         return [...face[position]];
     }
-     getColumn(position: RubiksCubeColumnPosition, face: RubiksCubeFace) {
+     getColumn(position: RubiksCubeColumnPosition, face: RubiksCubeFaceState) {
         return [face[0][position], face[1][position], face[2][position]];
     }
-    getFirstColumn = (face: RubiksCubeFace) => this.getColumn(0, face);
-    getSecondColumn = (face: RubiksCubeFace) => this.getColumn(1, face);
-    getThirdColumn = (face: RubiksCubeFace) => this.getColumn(2, face);
+    getFirstColumn = (face: RubiksCubeFaceState) => this.getColumn(0, face);
+    getSecondColumn = (face: RubiksCubeFaceState) => this.getColumn(1, face);
+    getThirdColumn = (face: RubiksCubeFaceState) => this.getColumn(2, face);
     
-    getFirstRow = (face: RubiksCubeFace) => this.getRow(0, face);
-    getSecondRow = (face: RubiksCubeFace) => this.getRow(1, face);
-    getThirdRow = (face: RubiksCubeFace) => this.getRow(2, face);
+    getFirstRow = (face: RubiksCubeFaceState) => this.getRow(0, face);
+    getSecondRow = (face: RubiksCubeFaceState) => this.getRow(1, face);
+    getThirdRow = (face: RubiksCubeFaceState) => this.getRow(2, face);
 
     rotateRightClockwise() {
-        const upRightColumn = this.getThirdColumn(this.upFace);
-        const frontRightColumn = this.getThirdColumn(this.frontFace);
-        const backLeftColumn = this.getFirstColumn(this.backFace);
-        const bottomRightColumn = this.getThirdColumn(this.bottomFace);
-        this.rotateFaceClockwise(this.rightFace);
-
+        const upRightColumn = (this._upFace).getThirdColumn();
+        const frontRightColumn = (this._frontFace).getThirdColumn();
+        const backLeftColumn = (this._backFace).getFirstColumn();
+        const bottomRightColumn = (this._bottomFace).getThirdColumn();
+        this._rightFace.rotateClockwise();
         this.upFace[0][2] = frontRightColumn[0];
         this.upFace[1][2] = frontRightColumn[1];
         this.upFace[2][2] = frontRightColumn[2];
@@ -99,12 +115,11 @@ export class RubiksCube {
         this.frontFace[2][2] = bottomRightColumn[2];
     }
     rotateRightCounterClockwise() {
-        const upRightColumn = this.getThirdColumn(this.upFace);
-        const frontRightColumn = this.getThirdColumn(this.frontFace);
-        const backLeftColumn = this.getFirstColumn(this.backFace);
-        const bottomRightColumn = this.getThirdColumn(this.bottomFace);
-        this.rotateFaceCounterClockwise(this.rightFace);
-    
+        const upRightColumn = (this._upFace).getThirdColumn();
+        const frontRightColumn = (this._frontFace).getThirdColumn();
+        const backLeftColumn = (this._backFace).getFirstColumn();
+        const bottomRightColumn = (this._bottomFace).getThirdColumn();
+        this._rightFace.rotateCounterClockwise();
         this.upFace[0][2] = backLeftColumn[2];
         this.upFace[1][2] = backLeftColumn[1];
         this.upFace[2][2] = backLeftColumn[0];
@@ -121,13 +136,16 @@ export class RubiksCube {
         this.backFace[1][0] = bottomRightColumn[1];
         this.backFace[2][0] = bottomRightColumn[0];
     }
-    
+    rotateRightTwice() {
+        this.rotateRightClockwise();
+        this.rotateRightClockwise();
+    }
     rotateUpClockwise() {
-        const frontFirstRow = this.getFirstRow(this.frontFace);
-        const leftFirstRow = this.getFirstRow(this.leftFace);
-        const backFirstRow = this.getFirstRow(this.backFace);
-        const rightFirstRow = this.getFirstRow(this.rightFace);
-        this.rotateFaceClockwise(this.upFace);
+        const frontFirstRow = this._frontFace.getFirstRow();
+        const leftFirstRow = this._leftFace.getFirstRow();
+        const backFirstRow = (this._backFace).getFirstRow();
+        const rightFirstRow = (this._rightFace).getFirstRow();
+        this._upFace.rotateClockwise();
         
         this.frontFace[0][0] = rightFirstRow[0];
         this.frontFace[0][1] = rightFirstRow[1];
@@ -147,11 +165,11 @@ export class RubiksCube {
         this.rightFace[0][2] = backFirstRow[2];
     }
     rotateUpCounterClockwise() {
-        const frontFirstRow = this.getFirstRow(this.frontFace);
-        const leftFirstRow = this.getFirstRow(this.leftFace);
-        const backFirstRow = this.getFirstRow(this.backFace);
-        const rightFirstRow = this.getFirstRow(this.rightFace);
-        this.rotateFaceCounterClockwise(this.upFace);
+        const frontFirstRow = this._frontFace.getFirstRow();
+        const leftFirstRow = (this._leftFace).getFirstRow();
+        const backFirstRow = (this._backFace).getFirstRow();
+        const rightFirstRow = (this._rightFace).getFirstRow();
+        this._upFace.rotateCounterClockwise();
     
         this.frontFace[0][0] = leftFirstRow[0];
         this.frontFace[0][1] = leftFirstRow[1];
@@ -174,12 +192,11 @@ export class RubiksCube {
         this.rotateUpClockwise();
     }
     rotateLeftClockwise() {
-        this.rotateFaceClockwise(this.leftFace);
-        const upLeftColumn = this.getFirstColumn(this.upFace);
-        const frontLeftColumn = this.getFirstColumn(this.frontFace);
-        const backRightColumn = this.getThirdColumn(this.backFace);
-        const bottomLeftColumn = this.getFirstColumn(this.bottomFace);
-    
+        const upLeftColumn = (this._upFace).getFirstColumn();
+        const frontLeftColumn = (this._frontFace).getFirstColumn();
+        const backRightColumn = (this._backFace).getThirdColumn();
+        const bottomLeftColumn = (this._bottomFace).getFirstColumn();
+        this._leftFace.rotateClockwise();
         this.upFace[0][0] = backRightColumn[2];
         this.upFace[1][0] = backRightColumn[1];
         this.upFace[2][0] = backRightColumn[0];
@@ -197,11 +214,11 @@ export class RubiksCube {
         this.backFace[2][2] = bottomLeftColumn[0];
     }
     rotateLeftCounterClockwise() {
-        const upLeftColumn = this.getFirstColumn(this.upFace);
-        const frontLeftColumn = this.getFirstColumn(this.frontFace);
-        const backRightColumn = this.getThirdColumn(this.backFace);
-        const bottomLeftColumn = this.getFirstColumn(this.bottomFace);
-        this.rotateFaceCounterClockwise(this.leftFace);
+        const upLeftColumn = (this._upFace).getFirstColumn();
+        const frontLeftColumn = (this._frontFace).getFirstColumn();
+        const backRightColumn = (this._backFace).getThirdColumn();
+        const bottomLeftColumn = (this._bottomFace).getFirstColumn();
+        this._leftFace.rotateCounterClockwise();
     
         this.upFace[0][0] = frontLeftColumn[0];
         this.upFace[1][0] = frontLeftColumn[1];
@@ -224,12 +241,12 @@ export class RubiksCube {
         this.rotateLeftClockwise();
     }
     rotateBottomClockwise() {
-        this.rotateFaceClockwise(this.bottomFace);
-        const frontBottomRow = this.getThirdRow(this.frontFace);
-        const rightBottomRow = this.getThirdRow(this.rightFace);
-        const backBottomRow = this.getThirdRow(this.backFace);
-        const leftBottomRow = this.getThirdRow(this.leftFace);
-    
+        const frontBottomRow = (this._frontFace).getThirdRow();
+        const rightBottomRow = (this._rightFace).getThirdRow();
+        const backBottomRow = (this._backFace).getThirdRow();
+        const leftBottomRow = (this._leftFace).getThirdRow();
+        this._bottomFace.rotateClockwise();
+
         this.frontFace[2][0] = leftBottomRow[0];
         this.frontFace[2][1] = leftBottomRow[1];
         this.frontFace[2][2] = leftBottomRow[2];
@@ -247,12 +264,11 @@ export class RubiksCube {
         this.leftFace[2][2] = backBottomRow[2];
     }
     rotateBottomCounterClockwise() {
-    const frontBottomRow = this.getThirdRow(this.frontFace);
-    const rightBottomRow = this.getThirdRow(this.rightFace);
-    const backBottomRow = this.getThirdRow(this.backFace);
-    const leftBottomRow = this.getThirdRow(this.leftFace);
-    this.rotateFaceCounterClockwise(this.bottomFace);
-
+    const frontBottomRow = (this._frontFace).getThirdRow();
+    const rightBottomRow = (this._rightFace).getThirdRow();
+    const backBottomRow = (this._backFace).getThirdRow();
+    const leftBottomRow = (this._leftFace).getThirdRow();
+    this._bottomFace.rotateCounterClockwise();
     this.frontFace[2][0] = rightBottomRow[0];
     this.frontFace[2][1] = rightBottomRow[1];
     this.frontFace[2][2] = rightBottomRow[2];
@@ -274,12 +290,11 @@ export class RubiksCube {
         this.rotateBottomClockwise();
     }
     rotateFrontClockwise() {
-        const upThirdRow = this.getThirdRow(this.upFace);
-        const rightFirstColumn = this.getFirstColumn(this.rightFace);
-        const leftThirdColumn = this.getThirdColumn(this.leftFace);
-        const bottomFirstRow = this.getFirstRow(this.bottomFace);
-        this.rotateFaceClockwise(this.frontFace);
-
+        const upThirdRow = (this._upFace).getThirdRow();
+        const rightFirstColumn = (this._rightFace).getFirstColumn();
+        const leftThirdColumn = (this._leftFace).getThirdColumn();
+        const bottomFirstRow = (this._bottomFace).getFirstRow();
+        this._frontFace.rotateClockwise();
         this.upFace[2][0] = leftThirdColumn[2];
         this.upFace[2][1] = leftThirdColumn[1];
         this.upFace[2][2]  = leftThirdColumn[0];
@@ -297,12 +312,11 @@ export class RubiksCube {
         this.leftFace[2][2] = bottomFirstRow[2];
     }
     rotateFrontCounterClockwise() {
-        const upThirdRow = this.getThirdRow(this.upFace);
-        const rightFirstColumn = this.getFirstColumn(this.rightFace);
-        const leftThirdColumn = this.getThirdColumn(this.leftFace);
-        const bottomFirstRow = this.getFirstRow(this.bottomFace);
-        this.rotateFaceCounterClockwise(this.frontFace);
-
+        const upThirdRow = (this._upFace).getThirdRow();
+        const rightFirstColumn = (this._rightFace).getFirstColumn();
+        const leftThirdColumn = (this._leftFace).getThirdColumn();
+        const bottomFirstRow = (this._bottomFace).getFirstRow();
+        this._frontFace.rotateCounterClockwise();
         this.upFace[2][0] = rightFirstColumn[0]
         this.upFace[2][1] = rightFirstColumn[1] 
         this.upFace[2][2] = rightFirstColumn[2] 
@@ -324,12 +338,11 @@ export class RubiksCube {
         this.rotateFrontClockwise();
     }
     rotateBackClockwise() {
-        const upFirstRow = this.getFirstRow(this.upFace);
-        const rightThirdColumn = this.getThirdColumn(this.rightFace);
-        const leftFirstColumn = this.getFirstColumn(this.leftFace);
-        const bottomThirdRow = this.getThirdRow(this.bottomFace);
-        this.rotateFaceClockwise(this.backFace);
-
+        const upFirstRow = (this._upFace).getFirstRow();
+        const rightThirdColumn = (this._rightFace).getThirdColumn();
+        const leftFirstColumn = (this._leftFace).getFirstColumn();
+        const bottomThirdRow = (this._bottomFace).getThirdRow();
+        this._backFace.rotateClockwise();
         this.upFace[0][0] = rightThirdColumn[0];
         this.upFace[0][1] = rightThirdColumn[1];
         this.upFace[0][2] = rightThirdColumn[2];
@@ -347,12 +360,11 @@ export class RubiksCube {
         this.leftFace[2][0] = upFirstRow[0];
     }
     rotateBackCounterClockwise() {
-        const upFirstRow = this.getFirstRow(this.upFace);
-        const rightThirdColumn = this.getThirdColumn(this.rightFace);
-        const leftFirstColumn = this.getFirstColumn(this.leftFace);
-        const bottomThirdRow = this.getThirdRow(this.bottomFace);
-        this.rotateFaceCounterClockwise(this.backFace);
-
+        const upFirstRow = (this._upFace).getFirstRow();
+        const rightThirdColumn = (this._rightFace).getThirdColumn();
+        const leftFirstColumn = (this._leftFace).getFirstColumn();
+        const bottomThirdRow = (this._bottomFace).getThirdRow();
+        this._backFace.rotateCounterClockwise();
         this.upFace[0][0] = leftFirstColumn[2];
         this.upFace[0][1] = leftFirstColumn[1];
         this.upFace[0][2] = leftFirstColumn[0];
