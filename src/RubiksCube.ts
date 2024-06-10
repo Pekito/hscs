@@ -81,21 +81,6 @@ export class RubiksCube {
         console.log(middleLayer);
         console.log(bottomFace);
     }
-     getRow(position: RubiksCubeGridPosition, face: RubiksCubeFaceState) {
-        return [...face[position]];
-    }
-     getColumn(position: RubiksCubeGridPosition, face: RubiksCubeFaceState) {
-        return [face[0][position], face[1][position], face[2][position]];
-    }
-    getFirstColumn = (face: RubiksCubeFaceState) => this.getColumn(0, face);
-    getSecondColumn = (face: RubiksCubeFaceState) => this.getColumn(1, face);
-    getThirdColumn = (face: RubiksCubeFaceState) => this.getColumn(2, face);
-    
-    getFirstRow = (face: RubiksCubeFaceState) => this.getRow(0, face);
-    getSecondRow = (face: RubiksCubeFaceState) => this.getRow(1, face);
-    getThirdRow = (face: RubiksCubeFaceState) => this.getRow(2, face);
-    getPiece = (primaryFace: RubiksCubeFace, secondaryFace: RubiksCubeFace) => {
-    }
     rotateRightClockwise() {
         const upRightColumn = (this._upFace).getThirdColumn();
         const frontRightColumn = (this._frontFace).getThirdColumn();

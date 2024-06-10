@@ -104,14 +104,3 @@ describe("Solvability", () => {
         expect(cube.isSolved()).toEqual(false);
     })
 })
-describe("Cloning", () => {
-    it("Should clone without sharing reference", () => {
-        const cube = new RubiksCube();
-
-        const frontFaceFirstRow = cube.getRow(0,cube.frontFace);
-        const frontFaceFirstColumn = cube.getColumn(0, cube.frontFace);
-        cube.rotateUpClockwise();
-        expect(frontFaceFirstRow).toEqual(['G','G','G']);
-        expect(frontFaceFirstColumn).toEqual(['G','G','G']);
-    })
-})
