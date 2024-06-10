@@ -1,24 +1,24 @@
-import { RubiksCubeColor, RubiksCubeColumnPosition, RubiksCubeFaceState, RubiksCubeLine, RubiksCubeRowPosition } from "./RubiksCube";
+import { RubiksCubeColor, RubiksCubeFaceState, RubiksCubeLine, RubiksCubeGridPosition } from "./RubiksCube";
 
 export class RubiksCubeFace {
     state: RubiksCubeFaceState;
     constructor(state: RubiksCubeFaceState) {
         this.state = state;
     }
-    private getRow(position: RubiksCubeRowPosition, ) {
+    private getRow(position: RubiksCubeGridPosition, ) {
         return [...this.state[position]];
     }
-    private getColumn(position: RubiksCubeColumnPosition, ) {
+    private getColumn(position: RubiksCubeGridPosition, ) {
         return [this.state[0][position], this.state[1][position], this.state[2][position]];
     }
-    private createColumnSetter(columnNumber: RubiksCubeColumnPosition) {
+    private createColumnSetter(columnNumber: RubiksCubeGridPosition) {
         return (first: RubiksCubeColor, middle: RubiksCubeColor, last: RubiksCubeColor) => {
             this.state[0][columnNumber] = first;
             this.state[1][columnNumber] = middle;
             this.state[2][columnNumber] = last;
         }
     }
-    private createRowSetter(rowNumber: RubiksCubeRowPosition) {
+    private createRowSetter(rowNumber: RubiksCubeGridPosition) {
         return (first: RubiksCubeColor, middle: RubiksCubeColor, last: RubiksCubeColor) => {
             this.state[rowNumber][0] = first;
             this.state[rowNumber][1] = middle;

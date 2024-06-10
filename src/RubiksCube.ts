@@ -1,29 +1,58 @@
 import { RubiksCubeFace } from "./RubiksCubeFace";
+export type RubiksCubeFaceNotation = 'U' | 'L' | 'F' | 'R' | 'B' | 'D';
 
 // W = White | R = Red | G = Green | O = Orange | B = Blue | Y = Yellow
 export type RubiksCubeColor = 'W' | 'R' | 'G' | 'O' | 'B' | 'Y';
 export type RubiksCubeLine = [RubiksCubeColor,RubiksCubeColor,RubiksCubeColor];
 export type RubiksCubeFaceState = [RubiksCubeLine,RubiksCubeLine,RubiksCubeLine];
-
+type RubiksCubeUpFaceState = RubiksCubeFaceState;
+type RubiksCubeLeftFaceState = RubiksCubeFaceState;
+type RubiksCubeFrontFaceState = RubiksCubeFaceState;
+type RubiksCubeRightFaceState = RubiksCubeFaceState;
+type RubiksCubeBackFaceState = RubiksCubeFaceState;
+type RubiksCubeBottomFaceState = RubiksCubeFaceState;
+export type RubiksCubeState = [
+    RubiksCubeUpFaceState,
+    RubiksCubeLeftFaceState,
+    RubiksCubeFrontFaceState,
+    RubiksCubeRightFaceState,
+    RubiksCubeBackFaceState,
+    RubiksCubeBottomFaceState
+]
 export const RubiksCubeCenter: RubiksCubePosition = {
     column: 1,
     row: 1
 };
-export type RubiksCubeRowPosition = 0 | 1 | 2;
-export type RubiksCubeColumnPosition = 0 | 1 | 2;
+export type RubiksCubeGridPosition = 0 | 1 | 2;
 export type RubiksCubePosition = {
-    column: RubiksCubeColumnPosition;
-    row: RubiksCubeRowPosition;
+    column: RubiksCubeGridPosition;
+    row: RubiksCubeGridPosition;
 };
 export class RubiksCube {
     static createRubiksCubeFace = (color: RubiksCubeColor): RubiksCubeFaceState => [[color,color,color],[color,color,color],[color,color,color]];
-
-    _upFace = new RubiksCubeFace(RubiksCube.createRubiksCubeFace('W'));
-    _leftFace = new RubiksCubeFace(RubiksCube.createRubiksCubeFace('O'));
-    _frontFace = new RubiksCubeFace(RubiksCube.createRubiksCubeFace('G'));
-    _rightFace = new RubiksCubeFace(RubiksCube.createRubiksCubeFace('R'));
-    _backFace = new RubiksCubeFace(RubiksCube.createRubiksCubeFace('B'));
-    _bottomFace = new RubiksCubeFace(RubiksCube.createRubiksCubeFace('Y'));
+    state: RubiksCubeState;
+    _upFace: RubiksCubeFace; 
+    _leftFace: RubiksCubeFace;
+    _frontFace: RubiksCubeFace;
+    _rightFace: RubiksCubeFace;
+    _backFace: RubiksCubeFace;
+    _bottomFace: RubiksCubeFace;
+    constructor({
+        upFace = RubiksCube.createRubiksCubeFace('W'),
+        leftFace = RubiksCube.createRubiksCubeFace('O'),
+        frontFace = RubiksCube.createRubiksCubeFace('G'),
+        rightFace = RubiksCube.createRubiksCubeFace('R'),
+        backFace = RubiksCube.createRubiksCubeFace('B'),
+        bottomFace = RubiksCube.createRubiksCubeFace('Y'),
+    } = {}) {
+        this.state = [upFace,leftFace,frontFace,rightFace,backFace,bottomFace];
+        this._upFace = new RubiksCubeFace(upFace);
+        this._leftFace = new RubiksCubeFace(leftFace);
+        this._frontFace = new RubiksCubeFace(frontFace);
+        this._rightFace = new RubiksCubeFace(rightFace);
+        this._backFace = new RubiksCubeFace(backFace);
+        this._bottomFace = new RubiksCubeFace(bottomFace);
+    }
     get upFace() {return this._upFace.state}
     get leftFace() {return this._leftFace.state}
     get frontFace() {return this._frontFace.state}
@@ -49,39 +78,10 @@ export class RubiksCube {
         console.log(middleLayer);
         console.log(bottomFace);
     }
-    private rotateFaceClockwise(face: RubiksCubeFaceState) {
-        const currentFace = structuredClone(face);
-
-        face[0][0] = currentFace[2][0];
-        face[0][1] = currentFace[1][0];
-        face[0][2] = currentFace[0][0];
-
-        face[1][0] = currentFace[2][1];
-        face[1][2] = currentFace[0][1];
-
-        face[2][0] = currentFace[2][2];
-        face[2][1] = currentFace[1][2];
-        face[2][2] = currentFace[0][2];
-
-    }
-    private rotateFaceCounterClockwise(face: RubiksCubeFaceState) {
-        const currentFace = structuredClone(face);
-
-        face[0][0] = currentFace[0][2];
-        face[0][1] = currentFace[1][2];
-        face[0][2] = currentFace[2][2];
-
-        face[1][0] = currentFace[0][1];
-        face[1][2] = currentFace[2][1];
-
-        face[2][0] = currentFace[0][0];
-        face[2][1] = currentFace[1][0];
-        face[2][2] = currentFace[2][0];
-    }
-     getRow(position: RubiksCubeRowPosition, face: RubiksCubeFaceState) {
+     getRow(position: RubiksCubeGridPosition, face: RubiksCubeFaceState) {
         return [...face[position]];
     }
-     getColumn(position: RubiksCubeColumnPosition, face: RubiksCubeFaceState) {
+     getColumn(position: RubiksCubeGridPosition, face: RubiksCubeFaceState) {
         return [face[0][position], face[1][position], face[2][position]];
     }
     getFirstColumn = (face: RubiksCubeFaceState) => this.getColumn(0, face);
@@ -91,7 +91,8 @@ export class RubiksCube {
     getFirstRow = (face: RubiksCubeFaceState) => this.getRow(0, face);
     getSecondRow = (face: RubiksCubeFaceState) => this.getRow(1, face);
     getThirdRow = (face: RubiksCubeFaceState) => this.getRow(2, face);
-
+    getPiece = (primaryFace: RubiksCubeFace, secondaryFace: RubiksCubeFace) => {
+    }
     rotateRightClockwise() {
         const upRightColumn = (this._upFace).getThirdColumn();
         const frontRightColumn = (this._frontFace).getThirdColumn();
