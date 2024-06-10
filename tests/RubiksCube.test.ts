@@ -93,7 +93,17 @@ describe("Rotation", () => {
         expect(cube.bottomFace).toEqual([['Y','Y','Y'],['Y','Y','Y'],['Y','Y','G']]);
     })
 });
-
+describe("Solvability", () => {
+    it("Should return true if cube is solved", () => {
+        const cube = new RubiksCube();
+        expect(cube.isSolved()).toEqual(true);
+    })
+    it("Should return false if cube is not solved", () => {
+        const cube = new RubiksCube();
+        cube.rotateBackClockwise();
+        expect(cube.isSolved()).toEqual(false);
+    })
+})
 describe("Cloning", () => {
     it("Should clone without sharing reference", () => {
         const cube = new RubiksCube();

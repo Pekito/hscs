@@ -59,6 +59,9 @@ export class RubiksCube {
     get rightFace() {return this._rightFace.state}
     get backFace() {return this._backFace.state}
     get bottomFace() {return this._bottomFace.state}
+    isSolved() {
+        return this.state.every(face => face.every(row => row.every((color) => color === row[0])))
+    }
     printState() {
         const printFace = (face: RubiksCubeFaceState) => {
             return face.map(row => row.join(' ')).join('\n');
