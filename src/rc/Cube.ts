@@ -33,7 +33,7 @@
 class Cube {
 
   /**
-   * The actual current cube stickers state, represented by numbers.
+   * The actual current cube stickers state, represented by numbers as a uni-dimensional array.
    */
   state: Array<number> = [];
 
