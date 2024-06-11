@@ -88,13 +88,12 @@ class Cube {
    * Setup a solved cube where each sticker is a singular number, going from 0 to 53.
    */
   constructor() {
-    for (let i = 0; i < 6 * 9; i++) {
+    for (let i = 0; i < 6 * 9; i++)
       this.state.push(i);
-    }
   }
 
   /**
-   * Applies a sequence of moves (in their string sign) onto the state of this cube.
+   * Applies a sequence of moves (in their string sign "mode") onto the state of this cube.
    * The string moves names are mapped to the actual index maps of this cube.
    * @param sequence a Rubik's cube movements sequence in the standard pattern.
    */
@@ -118,9 +117,8 @@ class Cube {
       }
 
       // multiplies the same map based on move length
-      for (let i = 0; i < move.length; i++) {
+      for (let i = 0; i < move.length; i++)
         this.multiplyState(nextIndexMap);
-      }
     }
   }
 
@@ -160,4 +158,3 @@ class Cube {
     console.log(res);
   }
 }
-
