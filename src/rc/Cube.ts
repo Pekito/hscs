@@ -94,7 +94,7 @@ class Cube {
 
   /**
    * Applies a sequence of moves (in their string sign "mode") onto the state of this cube.
-   * The string moves names are mapped to the actual index maps of this cube.
+   * The string moves names are mapped to the respective indexes map declared in this cube.
    * @param sequence a Rubik's cube movements sequence in the standard pattern.
    */
   applySequence(sequence: string) {
