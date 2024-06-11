@@ -1,3 +1,12 @@
+class PieceInfo {
+  speffzSign: string;
+  pieces: number[];
+  constructor(speffzSign: string, pieces: Array<number>) {
+    this.speffzSign = speffzSign;
+    this.pieces = pieces;
+  }
+}
+
 /**
  * Class used to represent a Rubik's Cube using numbers in uni-dimensional array.
  * 
@@ -6,14 +15,17 @@
  *
  * 
  * Below we have a reference scheme for the stickers arrangement in the solved position:
+ * 
+ * U R F -- D L B
+ * 
  * ```
- * ===================
- *       U            |
- *                    |
- *  L    F    R    B  |
- *                    |
- *       D            |
- * ===================
+ * ===============================
+ *          U(0)                  |
+ *                                |
+ *  L(4)    F(2)    R(1)    B(5)  |
+ *                                |
+ *          D(3)                  |
+ * ===============================
  * 
  *           00 01 02
  *           03 04 05
@@ -27,6 +39,18 @@
  *           30 31 32
  *           33 34 35
  * ```
+ * 
+ * 36, 37, 38, 39, 40, 41, 42, 43, 44,
+ * 
+ * 18, 19, 20, 21, 22, 23, 24, 25, 26,
+ * 
+ * 27, 28, 29, 30, 31, 32, 33, 34, 35,
+ * 
+ * 9, 10, 11, 12, 13, 14, 15, 16, 17
+ * 
+ * 45, 46, 47, 48, 49, 50, 51, 52, 53
+ * 
+ * 0, 1, 2, 3, 4, 5, 6, 7, 8
  * 
  * TODO: consider update the functions to return a new/current instance itself.
  */
@@ -134,11 +158,41 @@ class Cube {
   }
 
   /**
-   * Basic method to check if this cube state is in the solved state.
-   * @returns `true` if the cube is solved, otherwise, returns `false`.
+   * Basic method to check if this cube is solved, taking care about the full cube rotations.
+   * 
+   * @param checkingState the target state to be checked. By default, is set to be the state of the current instance.
+   * @returns `true` if the cube is solved, even in a random rotation. Otherwise, returns `false`.
    */
-  isSolved() {
-    return this.state.join(" ") === "0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53";
+  isSolved(checkingState: Array<number> = this.state) {
+    /**
+     * Basically checks if the content of two arrays of numbers are equals. Doesn't take care about length.
+     * @param a first array, normally the array that is being tested.
+     * @param b second array, normally the comparison pattern to the first. 
+     * @returns `true` if the content of both arrays are the same, otherwise `false`.
+     */
+    function arrayEquals(a: Array<number>, b: Array<number>) {
+      for (let i = 0; i < a.length; i++) {
+        if (a[i] !== b[i]) {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    const pattern = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+
+    for (let i = 0; i < 6; i++) {
+      const nextFaceIndex = i * 9;
+      const check = arrayEquals(
+        checkingState.slice(nextFaceIndex, nextFaceIndex + 9).map(s => { return s % 9 }),
+        pattern
+      );
+
+      if (!check) return false;
+    }
+
+    return true;
   }
 
   /**
@@ -158,3 +212,17 @@ class Cube {
     console.log(res);
   }
 }
+
+const c = new Cube();
+
+// simulating (y' and x) rotations (orange top, yellow front)
+const auxRotatedState = [
+  36, 37, 38, 39, 40, 41, 42, 43, 44,
+  18, 19, 20, 21, 22, 23, 24, 25, 26,
+  27, 28, 29, 30, 31, 32, 33, 34, 35,
+  9, 10, 11, 12, 13, 14, 15, 16, 17,
+  45, 46, 47, 48, 49, 50, 51, 52, 53,
+  0, 1, 2, 3, 4, 5, 6, 7, 8
+];
+
+console.log(c.isSolved(auxRotatedState));
