@@ -1,5 +1,5 @@
 /**
- * Class used to represent a Rubik's Cube using numbers.
+ * Class used to represent a Rubik's Cube using numbers in uni-dimensional array.
  * 
  * The cube is represented in a "state-based" approach, where each sticker of the cube is a singular number inside an array. Due to this, is possible to track each individual sticker by its value. For example, we can get the original face (or color) of a sticker by doing:
  * - `Math.floor(sticker / 9);`, which returns a number between 0 and 5, representing one of the six faces.
