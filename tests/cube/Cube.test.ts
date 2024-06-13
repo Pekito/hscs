@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import {createCube, getFace, moveCube} from "../../src/cube/Cube";
+import {createCube, getCenterIndex, getFace, moveCube} from "../../src/cube/Cube";
 import { B_LAYER_INDEX, D_LAYER_INDEX, F_LAYER_INDEX, L_LAYER_INDEX, R_LAYER_INDEX, U_LAYER_INDEX } from "../../src/cube/Constants";
 import { R_CLOCKWISE_MOVE, B_CLOCKWISE_MOVE, F_DOUBLE_MOVE, U_CLOCKWISE_MOVE, R_DOUBLE_MOVE, D_CLOCKWISE_MOVE, U_DOUBLE_MOVE, B_DOUBLE_MOVE, U_COUNTER_CLOCKWISE_MOVE, F_CLOCKWISE_MOVE, D_COUNTER_CLOCKWISE_MOVE, B_COUNTER_CLOCKWISE_MOVE, Z_CLOCKWISE_MOVE, Z_COUNTER_CLOCKWISE_MOVE, X_CLOCKWISE_MOVE, X_COUNTER_CLOCKWISE_MOVE, Y_CLOCKWISE_MOVE, Y_COUNTER_CLOCKWISE_MOVE, L_CLOCKWISE_MOVE, Z_DOUBLE_MOVE, X_DOUBLE_MOVE, Y_DOUBLE_MOVE } from "../../src/cube/Moves";
 
@@ -131,4 +131,20 @@ describe("moveCube", () => {
         const yRotatedCube = moveCube(moveCube(moveCube(createCube(), Y_DOUBLE_MOVE), B_CLOCKWISE_MOVE), Y_DOUBLE_MOVE);
         expect(fMovedCube).toEqual(yRotatedCube);
     });
+});
+ 
+describe("getCenter", () => {
+    it("Should return the correct index on a solved cube", () => {
+        const cube = createCube();
+        expect(getCenterIndex(F_LAYER_INDEX, cube)).toEqual(22);
+    });
+    it("Should return the correct index on a axis rotated cube", () => {
+        const rotatedCube = moveCube(createCube(), Z_CLOCKWISE_MOVE);
+        expect(getCenterIndex(U_LAYER_INDEX, rotatedCube)).toEqual(13);
+        expect(getCenterIndex(L_LAYER_INDEX, rotatedCube)).toEqual(49);
+        expect(getCenterIndex(F_LAYER_INDEX, rotatedCube)).toEqual(22);
+        expect(getCenterIndex(R_LAYER_INDEX, rotatedCube)).toEqual(4);
+        expect(getCenterIndex(B_LAYER_INDEX, rotatedCube)).toEqual(40);
+        expect(getCenterIndex(D_LAYER_INDEX, rotatedCube)).toEqual(31);
+    })
 });
