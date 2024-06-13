@@ -1,10 +1,9 @@
 import { describe, it, expect } from "vitest";
 import {createCube, getCenterIndex, getFace, moveCube} from "../../src/cube/Cube";
 import { B_LAYER_INDEX, D_LAYER_INDEX, F_LAYER_INDEX, L_LAYER_INDEX, R_LAYER_INDEX, U_LAYER_INDEX } from "../../src/cube/Constants";
-import { R_CLOCKWISE_MOVE, B_CLOCKWISE_MOVE, F_DOUBLE_MOVE, U_CLOCKWISE_MOVE, R_DOUBLE_MOVE, D_CLOCKWISE_MOVE, U_DOUBLE_MOVE, B_DOUBLE_MOVE, U_COUNTER_CLOCKWISE_MOVE, F_CLOCKWISE_MOVE, D_COUNTER_CLOCKWISE_MOVE, B_COUNTER_CLOCKWISE_MOVE, Z_CLOCKWISE_MOVE, Z_COUNTER_CLOCKWISE_MOVE, X_CLOCKWISE_MOVE, X_COUNTER_CLOCKWISE_MOVE, Y_CLOCKWISE_MOVE, Y_COUNTER_CLOCKWISE_MOVE, L_CLOCKWISE_MOVE, Z_DOUBLE_MOVE, X_DOUBLE_MOVE, Y_DOUBLE_MOVE, M_DOUBLE_MOVE, S_DOUBLE_MOVE, E_DOUBLE_MOVE, M_CLOCKWISE_MOVE, S_CLOCKWISE_MOVE, M_COUNTER_CLOCKWISE_MOVE, S_COUNTER_CLOCKWISE_MOVE, L_COUNTER_CLOCKWISE_MOVE, R_COUNTER_CLOCKWISE_MOVE, F_COUNTER_CLOCKWISE_MOVE, E_CLOCKWISE_MOVE, E_COUNTER_CLOCKWISE_MOVE, L_DOUBLE_MOVE, D_DOUBLE_MOVE } from "../../src/cube/Moves";
-import { RubiksCube, RubiksCubeMove } from "../../src/cube/Types";
-const moveReducer = (cube: RubiksCube, move: RubiksCubeMove) => moveCube(cube, move);
-const createCubeState = (moves: RubiksCubeMove[]): RubiksCube => moves.reduce(moveReducer, createCube());
+import { R_CLOCKWISE_MOVE, B_CLOCKWISE_MOVE, F_DOUBLE_MOVE, U_CLOCKWISE_MOVE, R_DOUBLE_MOVE, D_CLOCKWISE_MOVE, U_DOUBLE_MOVE, B_DOUBLE_MOVE, U_COUNTER_CLOCKWISE_MOVE, F_CLOCKWISE_MOVE, D_COUNTER_CLOCKWISE_MOVE, B_COUNTER_CLOCKWISE_MOVE, Z_CLOCKWISE_MOVE, Z_COUNTER_CLOCKWISE_MOVE, Z_DOUBLE_MOVE, X_CLOCKWISE_MOVE, X_COUNTER_CLOCKWISE_MOVE, X_DOUBLE_MOVE, Y_CLOCKWISE_MOVE, L_CLOCKWISE_MOVE, Y_COUNTER_CLOCKWISE_MOVE, Y_DOUBLE_MOVE, M_CLOCKWISE_MOVE, L_COUNTER_CLOCKWISE_MOVE, M_COUNTER_CLOCKWISE_MOVE, R_COUNTER_CLOCKWISE_MOVE, S_CLOCKWISE_MOVE, F_COUNTER_CLOCKWISE_MOVE, S_COUNTER_CLOCKWISE_MOVE, E_CLOCKWISE_MOVE, E_COUNTER_CLOCKWISE_MOVE, M_DOUBLE_MOVE, E_DOUBLE_MOVE, S_DOUBLE_MOVE, L_DOUBLE_MOVE, D_DOUBLE_MOVE } from "../../src/cube/moves";
+import { createCubeState } from "../Utils";
+
 describe("getFace", () => {
     const makeResult = (startingIndex: number) => Array.from({length: 9}, (_, i) => startingIndex + i);
     const solvedCube = createCube();
@@ -30,67 +29,28 @@ describe("getFace", () => {
 
 describe("moveCube", () => {
     it("Should scramble the cube correctly", () => {
-        const scrambledCube = moveCube(
-            moveCube(
-                moveCube(
-                    moveCube(
-                        moveCube(
-                            moveCube(
-                                moveCube(
-                                    moveCube(
-                                        moveCube(
-                                            moveCube(
-                                                moveCube(
-                                                    moveCube(
-                                                        moveCube(
-                                                            moveCube(
-                                                                moveCube(
-                                                                    moveCube(
-                                                                        moveCube(
-                                                                            moveCube(
-                                                                                moveCube(
-                                                                                    moveCube(
-                                                                                        createCube(),
-                                                                                        R_CLOCKWISE_MOVE
-                                                                                    ),
-                                                                                    B_CLOCKWISE_MOVE
-                                                                                ),
-                                                                                F_DOUBLE_MOVE
-                                                                            ),
-                                                                            U_CLOCKWISE_MOVE
-                                                                        ),
-                                                                        R_DOUBLE_MOVE
-                                                                    ),
-                                                                    F_DOUBLE_MOVE
-                                                                ),
-                                                                R_DOUBLE_MOVE
-                                                            ),
-                                                            D_CLOCKWISE_MOVE
-                                                        ),
-                                                        U_DOUBLE_MOVE
-                                                    ),
-                                                    B_DOUBLE_MOVE
-                                                ),
-                                                D_CLOCKWISE_MOVE
-                                            ),
-                                            R_DOUBLE_MOVE
-                                        ),
-                                        B_DOUBLE_MOVE
-                                    ),
-                                    U_COUNTER_CLOCKWISE_MOVE
-                                ),
-                                R_CLOCKWISE_MOVE
-                            ),
-                            F_CLOCKWISE_MOVE
-                        ),
-                        D_COUNTER_CLOCKWISE_MOVE
-                    ),
-                    B_COUNTER_CLOCKWISE_MOVE
-                ),
-                R_DOUBLE_MOVE
-            ),
+        const scrambledCube = createCubeState([
+            R_CLOCKWISE_MOVE,
+            B_CLOCKWISE_MOVE,
+            F_DOUBLE_MOVE,
+            U_CLOCKWISE_MOVE,
+            R_DOUBLE_MOVE,
+            F_DOUBLE_MOVE,
+            R_DOUBLE_MOVE,
+            D_CLOCKWISE_MOVE,
+            U_DOUBLE_MOVE,
+            B_DOUBLE_MOVE,
+            D_CLOCKWISE_MOVE,
+            R_DOUBLE_MOVE,
+            B_DOUBLE_MOVE,
+            U_COUNTER_CLOCKWISE_MOVE,
+            R_CLOCKWISE_MOVE,
+            F_CLOCKWISE_MOVE,
+            D_COUNTER_CLOCKWISE_MOVE,
+            B_COUNTER_CLOCKWISE_MOVE,
+            R_DOUBLE_MOVE,
             B_COUNTER_CLOCKWISE_MOVE
-        );
+        ]);
     
         expect(scrambledCube).toEqual([
             9,  7, 18, 23,  4, 39, 20, 52, 17, 38, 30, 27,

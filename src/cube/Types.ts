@@ -5,3 +5,8 @@ export type RubiksCubeFace = UnidimensionalFace<number>;
 export type ColoredRubiksCube = UnidimensionalCube<string>;
 export type RubiksCubeFaceNotation = "U" | "L" | "F" | "R" | "B" | "D";
 export type RubiksCubeMove = UnidimensionalCube<number>;
+export type RubiksCubeLayerMoveGroup = {
+    CLOCKWISE: RubiksCubeMove
+    COUNTER_CLOCKWISE: RubiksCubeMove
+    DOUBLE: RubiksCubeMove
+}

@@ -1,4 +1,4 @@
-import { CubeScheme } from "../cube/Schemes";
+import { CubeScheme, WCA_COLOR_SCHEME } from "../cube/Schemes";
 import { RubiksCube, UnidimensionalCube } from "../cube/Types";
 const getIndexColor = (scheme: CubeScheme, index: number) => {
     const faceIndex = Math.floor(index / 9);
@@ -20,3 +20,4 @@ export const print2DCube = (cube: UnidimensionalCube<any>) => {
     console.log("           " + cube.slice(48, 51).join(" "));
     console.log("           " + cube.slice(51, 54).join(" "));
 }
+export const printWCACube = (cube: RubiksCube) => print2DCube(getColoredCube(WCA_COLOR_SCHEME, cube));

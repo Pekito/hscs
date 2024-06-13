@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { createCube, moveCube } from "../../src/cube/Cube";
 import { isBottomCrossSolved, isCubeSolved } from "../../src/analyzers/CommonAnalyzers";
-import { R_CLOCKWISE_MOVE, Z_CLOCKWISE_MOVE } from "../../src/cube/Moves";
 import { applySequence } from "../../src/cube/Notation";
 import { RubiksCube } from "../../src/cube/Types";
+import { Z_CLOCKWISE_MOVE, R_CLOCKWISE_MOVE } from "../../src/cube/moves";
 
 describe("isCubeSolved", () => {
     it("Should return true if cube is solved", () => {
