@@ -136,15 +136,15 @@ describe("moveCube", () => {
 describe("getCenter", () => {
     it("Should return the correct index on a solved cube", () => {
         const cube = createCube();
-        expect(getCenterIndex(F_LAYER_INDEX, cube)).toEqual(22);
+        expect(getCenterIndex(getFace(F_LAYER_INDEX, cube))).toEqual(22);
     });
     it("Should return the correct index on a axis rotated cube", () => {
         const rotatedCube = moveCube(createCube(), Z_CLOCKWISE_MOVE);
-        expect(getCenterIndex(U_LAYER_INDEX, rotatedCube)).toEqual(13);
-        expect(getCenterIndex(L_LAYER_INDEX, rotatedCube)).toEqual(49);
-        expect(getCenterIndex(F_LAYER_INDEX, rotatedCube)).toEqual(22);
-        expect(getCenterIndex(R_LAYER_INDEX, rotatedCube)).toEqual(4);
-        expect(getCenterIndex(B_LAYER_INDEX, rotatedCube)).toEqual(40);
-        expect(getCenterIndex(D_LAYER_INDEX, rotatedCube)).toEqual(31);
+        expect(getCenterIndex(getFace(U_LAYER_INDEX, rotatedCube))).toEqual(13);
+        expect(getCenterIndex(getFace(L_LAYER_INDEX, rotatedCube))).toEqual(49);
+        expect(getCenterIndex(getFace(F_LAYER_INDEX, rotatedCube))).toEqual(22);
+        expect(getCenterIndex(getFace(R_LAYER_INDEX, rotatedCube))).toEqual(4);
+        expect(getCenterIndex(getFace(B_LAYER_INDEX, rotatedCube))).toEqual(40);
+        expect(getCenterIndex(getFace(D_LAYER_INDEX, rotatedCube))).toEqual(31);
     })
 });

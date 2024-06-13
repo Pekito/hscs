@@ -41,4 +41,4 @@ export const moveCube = (cube: RubiksCube, move: RubiksCubeMove): RubiksCube => 
 export const getLayerStartIndex = (faceIndex: number) => faceIndex * STICKERS_ON_FACE;
 export const getLayerEndIndex = (faceIndex: number) => getLayerStartIndex(faceIndex) + STICKERS_ON_FACE;
 export const getFace = (faceIndex: number, cube: RubiksCube): RubiksCubeFace => cube.slice(getLayerStartIndex(faceIndex), getLayerEndIndex(faceIndex));
-export const getCenterIndex = (faceIndex: number, cube: RubiksCube): number => getFace(faceIndex, cube)[CENTER_FACE_INDEX];
+export const getCenterIndex = (face: RubiksCubeFace): number => face[CENTER_FACE_INDEX];
