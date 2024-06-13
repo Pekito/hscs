@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import {createCube, getFace, moveCube} from "../../src/cube/Cube";
 import { B_LAYER_INDEX, D_LAYER_INDEX, F_LAYER_INDEX, L_LAYER_INDEX, R_LAYER_INDEX, U_LAYER_INDEX } from "../../src/cube/Constants";
-import { R_CLOCKWISE_MOVE, B_CLOCKWISE_MOVE, F_DOUBLE_MOVE, U_CLOCKWISE_MOVE, R_DOUBLE_MOVE, D_CLOCKWISE_MOVE, U_DOUBLE_MOVE, B_DOUBLE_MOVE, U_COUNTER_CLOCKWISE_MOVE, F_CLOCKWISE_MOVE, D_COUNTER_CLOCKWISE_MOVE, B_COUNTER_CLOCKWISE_MOVE } from "../../src/cube/Moves";
+import { R_CLOCKWISE_MOVE, B_CLOCKWISE_MOVE, F_DOUBLE_MOVE, U_CLOCKWISE_MOVE, R_DOUBLE_MOVE, D_CLOCKWISE_MOVE, U_DOUBLE_MOVE, B_DOUBLE_MOVE, U_COUNTER_CLOCKWISE_MOVE, F_CLOCKWISE_MOVE, D_COUNTER_CLOCKWISE_MOVE, B_COUNTER_CLOCKWISE_MOVE, Z_CLOCKWISE_MOVE, Z_COUNTER_CLOCKWISE_MOVE, X_CLOCKWISE_MOVE, X_COUNTER_CLOCKWISE_MOVE, Y_CLOCKWISE_MOVE, Y_COUNTER_CLOCKWISE_MOVE, L_CLOCKWISE_MOVE, Z_DOUBLE_MOVE, X_DOUBLE_MOVE, Y_DOUBLE_MOVE } from "../../src/cube/Moves";
 
 describe("getFace", () => {
     const makeResult = (startingIndex: number) => Array.from({length: 9}, (_, i) => startingIndex + i);
@@ -97,5 +97,38 @@ describe("moveCube", () => {
            11, 19,  0, 21, 40,  3, 44,  5, 53, 47, 50,  2,
            25, 49, 37, 42, 28, 15
          ])
-    })
-})
+    });
+    it("Should z rotate properly", () => {
+        const uMovedCube = moveCube(createCube(), U_CLOCKWISE_MOVE);
+        const uRotatedCube = moveCube(moveCube(moveCube(createCube(), Z_CLOCKWISE_MOVE), R_CLOCKWISE_MOVE), Z_COUNTER_CLOCKWISE_MOVE);
+        expect(uMovedCube).toEqual(uRotatedCube);
+    });
+    it("Should z2 rotate properly", () => {
+        const uMovedCube = moveCube(createCube(), U_CLOCKWISE_MOVE);
+        const uRotatedCube = moveCube(moveCube(moveCube(createCube(), Z_DOUBLE_MOVE), D_CLOCKWISE_MOVE), Z_DOUBLE_MOVE);
+        expect(uMovedCube).toEqual(uRotatedCube);
+    });
+
+    it("Should x rotate properly", () => {
+        const uMovedCube = moveCube(createCube(), U_CLOCKWISE_MOVE);
+        const uRotatedCube = moveCube(moveCube(moveCube(createCube(), X_CLOCKWISE_MOVE), B_CLOCKWISE_MOVE), X_COUNTER_CLOCKWISE_MOVE);
+        expect(uMovedCube).toEqual(uRotatedCube);
+    });
+
+    it("Should x2 rotate properly", () => {
+        const uMovedCube = moveCube(createCube(), U_CLOCKWISE_MOVE);
+        const uRotatedCube = moveCube(moveCube(moveCube(createCube(), X_DOUBLE_MOVE), D_CLOCKWISE_MOVE), X_DOUBLE_MOVE);
+        expect(uMovedCube).toEqual(uRotatedCube);
+    });
+    it("Should y rotate properly", () => {
+        const fMovedCube = moveCube(createCube(), F_CLOCKWISE_MOVE);
+        const yRotatedCube = moveCube(moveCube(moveCube(createCube(), Y_CLOCKWISE_MOVE), L_CLOCKWISE_MOVE), Y_COUNTER_CLOCKWISE_MOVE);
+        expect(fMovedCube).toEqual(yRotatedCube);
+    });
+
+    it("Should y2 rotate properly", () => {
+        const fMovedCube = moveCube(createCube(), F_CLOCKWISE_MOVE);
+        const yRotatedCube = moveCube(moveCube(moveCube(createCube(), Y_DOUBLE_MOVE), B_CLOCKWISE_MOVE), Y_DOUBLE_MOVE);
+        expect(fMovedCube).toEqual(yRotatedCube);
+    });
+});
