@@ -1,4 +1,4 @@
-import { NUMBER_OF_STICKERS_ON_CUBE, STICKERS_ON_FACE} from "./Constants";
+import { CENTER_FACE_INDEX, NUMBER_OF_STICKERS_ON_CUBE, STICKERS_ON_FACE} from "./Constants";
 import { RubiksCube, RubiksCubeMove, RubiksCubeFace } from "./Types";
 
 /**
@@ -41,4 +41,4 @@ export const moveCube = (cube: RubiksCube, move: RubiksCubeMove): RubiksCube => 
 export const getLayerStartIndex = (faceIndex: number) => faceIndex * STICKERS_ON_FACE;
 export const getLayerEndIndex = (faceIndex: number) => getLayerStartIndex(faceIndex) + STICKERS_ON_FACE;
 export const getFace = (faceIndex: number, cube: RubiksCube): RubiksCubeFace => cube.slice(getLayerStartIndex(faceIndex), getLayerEndIndex(faceIndex));
-export const getCenterIndex =(faceIndex: number, cube: RubiksCube): number => getFace(faceIndex, cube)[4];
+export const getCenterIndex = (faceIndex: number, cube: RubiksCube): number => getFace(faceIndex, cube)[CENTER_FACE_INDEX];
