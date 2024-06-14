@@ -584,3 +584,8 @@ export const LAYER_MOVES_ARRAY = Object.values(LAYER_MOVES)
     moveGroup.COUNTER_CLOCKWISE,
     moveGroup.DOUBLE
 ]);
+export const QUARTER_TURN_LAYER_MOVES_ARRAY = Object.values(LAYER_MOVES)
+.flatMap(moveGroup => [
+    moveGroup.CLOCKWISE,
+    moveGroup.COUNTER_CLOCKWISE
+]);

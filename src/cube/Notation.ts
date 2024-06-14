@@ -12,6 +12,7 @@ export const notationToLayerIndexMap: Record<string, number> = Object.freeze({
     "D": D_LAYER_INDEX
 });
 
+//TODO: https://stackoverflow.com/questions/66993264/what-does-the-as-const-mean-in-typescript-and-what-is-its-use-case
 const notationToMoveMap: Record<string, RubiksCubeMove> = Object.freeze({
     "U": U_CLOCKWISE_MOVE,
     "U'": U_COUNTER_CLOCKWISE_MOVE,
@@ -54,6 +55,7 @@ const moveToNotation = Object.fromEntries(
     Object.entries(notationToMoveMap).map(([key, value]) => [JSON.stringify(value), key])
 );
 export const getNotationFromMove = (move: RubiksCubeMove) => moveToNotation[JSON.stringify(move)];
+export const mapMoveArrayToNotation = (moves: RubiksCubeMove[]) => moves.map(getNotationFromMove);
 const isValidNotationMove = (input: string) => notationToMoveMap[input] !== undefined;
 export const applySequence = (cube: RubiksCube, sequence: string): RubiksCube | Error => {
     const clearedSequence = sequence.trim().split(" ");

@@ -10,3 +10,5 @@ export const areArraysEqual = <T>(a: Array<T> | ReadonlyArray<T>, b: Array<T> | 
     a.every((val, index) => val === b[index]);
 
 export const removeAtIndex = (index: number, array: Array<any>) => [...array.slice(0, index), ...array.slice(index + 1)];
+
+export const range = (index: number) => Array.from({length: index}, (_, i) => i + 1);
