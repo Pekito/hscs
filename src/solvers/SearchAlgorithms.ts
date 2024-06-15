@@ -3,18 +3,18 @@ import { RubiksCube, RubiksCubeMove } from "../cube/Types";
 import { range } from "../Utils";
 import { CubeCondition, RubiksCubeSolution } from "./Types";
 
-export type depthSearchParams = {
+export type DepthSearchSolutionParams = {
     condition: CubeCondition,
     cubeStateNode: RubiksCube,
     depth: number,
     possibleMoves: RubiksCubeMove[]
 }
-export const iterativeDepthSearch = ({
+export const iterativeDepthSearchSolution = ({
     condition, cubeStateNode, depth: maxDepth, possibleMoves
-}: depthSearchParams): RubiksCubeSolution | undefined => {
+}: DepthSearchSolutionParams): RubiksCubeSolution | undefined => {
     if(condition(cubeStateNode)) return [];
     for(const currentMaxDepth of range(maxDepth)) {
-        const result = depthSearch({
+        const result = depthSearchSolution({
             condition,
             depth: currentMaxDepth,
             cubeStateNode,
@@ -25,16 +25,16 @@ export const iterativeDepthSearch = ({
     return undefined;
 }
 
-export const depthSearch = ({
+export const depthSearchSolution = ({
     condition, cubeStateNode, depth, possibleMoves
-}: depthSearchParams): RubiksCubeSolution | undefined => {
+}: DepthSearchSolutionParams): RubiksCubeSolution | undefined => {
     if(depth === 0) {
         if(condition(cubeStateNode)) return [];
         else return undefined;
     }
     for(const move of possibleMoves) {
         const child = moveCube(cubeStateNode, move);
-        const result = depthSearch({
+        const result = depthSearchSolution({
             cubeStateNode: child,
             condition,
             depth: depth - 1,

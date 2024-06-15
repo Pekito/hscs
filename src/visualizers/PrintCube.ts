@@ -20,4 +20,5 @@ export const print2DCube = (cube: UnidimensionalCube<any>) => {
     console.log("           " + cube.slice(48, 51).join(" "));
     console.log("           " + cube.slice(51, 54).join(" "));
 }
-export const printWCACube = (cube: RubiksCube) => print2DCube(getColoredCube(WCA_COLOR_SCHEME, cube));
+export const wcaCube = (cube: RubiksCube) => getColoredCube(WCA_COLOR_SCHEME, cube)
+export const printWCACube = (cube: RubiksCube) => print2DCube(wcaCube(cube));

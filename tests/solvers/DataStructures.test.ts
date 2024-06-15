@@ -2,7 +2,7 @@ import { expect, test } from "vitest";
 import { createCube, moveCube } from "../../src/cube/Cube";
 import { U_CLOCKWISE_MOVE } from "../../src/cube/moves";
 import { RubiksCubeMove } from "../../src/cube/Types";
-import { cubeStateGraph } from "../../src/solvers/CubeStateGraph";
+import { cubeStateGraph } from "../../src/solvers/DataStructures";
 
 
 test("Should point to the same index", () => {
