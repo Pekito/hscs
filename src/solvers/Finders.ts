@@ -1,18 +1,10 @@
 import { isBottomCrossSolved } from "../analyzers/CommonAnalyzers";
-import { BOTTOM_EDGE_STICKER_INDEX, Y_AXIS_BOTTOM_EDGE_STICKERS } from "../cube/Constants";
-import { createCube, getFaces, getYAxisFaces, moveCube } from "../cube/Cube";
+import { moveCube } from "../cube/Cube";
 import { LAYER_MOVES_ARRAY } from "../cube/moves";
-import { getNotationFromMove } from "../cube/Notation";
 import { RubiksCube, RubiksCubeMove } from "../cube/Types";
-import { removeArrayDuplicates } from "../Utils";
-import { printWCACube, wcaCube } from "../visualizers/PrintCube";
-import { cubeStateGraph, StateHashTableKeyCreator, visitedStatesHashTable } from "./DataStructures";
+import { StateHashTableKeyCreator, visitedStatesHashTable } from "./DataStructures";
 import { DepthSearchSolutionParams, iterativeDepthSearchSolution } from "./SearchAlgorithms";
-import { createRubiksCubeStateKey, parseCubeStateKey } from "./Utils";
-
-
-
-
+import { createRubiksCubeStateKey } from "./Utils";
 
 export const findOptimalSequence = (params: DepthSearchSolutionParams) => {
     const solution = iterativeDepthSearchSolution(params);
