@@ -24,6 +24,7 @@ export const Y_AXIS_LAYERS = [
     R_LAYER_INDEX,
     B_LAYER_INDEX
 ]
+export const Y_AXIS_BOTTOM_EDGE_STICKERS = Y_AXIS_LAYERS.map(layerIndex => (layerIndex * STICKERS_ON_FACE) + BOTTOM_EDGE_STICKER_INDEX);
 export const FACE_INDEX_ARRAY = [
     U_LAYER_INDEX,
     L_LAYER_INDEX,

@@ -1,3 +1,6 @@
+import * as fs from 'fs';
+import * as path from 'path';
+
 export const getRandomObjectKey = <T>(obj: { [key: string]: T }): T => {
     const keys = Object.keys(obj);
     const randomKeyIndex = Math.floor(Math.random() * keys.length);
@@ -21,6 +24,23 @@ export const removeArrayDuplicates = <T extends PropertyKey>(array: T[]): T[] =>
         } else {
             seen[item] = true;
             return true;
+        }
+    });
+}
+
+export function writeJsonToFile(filePath: string, data: object): void {
+    const jsonContent = JSON.stringify(data, null, 2);
+
+    const dir = path.dirname(filePath);
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+    }
+
+    fs.writeFile(filePath, jsonContent, 'utf8', (err) => {
+        if (err) {
+            console.error('An error occurred while writing JSON to file:', err);
+        } else {
+            console.log('JSON file has been saved.');
         }
     });
 }

@@ -34,11 +34,12 @@ export const cubeStateGraph = () => {
     }
 }
 
-export const visitedStatesHashTable = () => {
+export type StateHashTableKeyCreator = (cube: RubiksCube) => string;
+export const visitedStatesHashTable = (keyCreator: StateHashTableKeyCreator) => {
     const stateNodes: RubiksCube[] = [];
     const stateEdges = new Map<RubiksCubeStateKey, stateNodeIndex>();
     const add = (cubeState: RubiksCube) => {
-        const cubeStateKey = createRubiksCubeStateKey(cubeState);
+        const cubeStateKey = keyCreator(cubeState);
         const cubeStateIndex = stateEdges.get(cubeStateKey);
         if(cubeStateIndex !== undefined) {
             stateEdges.set(cubeStateKey, cubeStateIndex);
@@ -48,7 +49,7 @@ export const visitedStatesHashTable = () => {
         stateEdges.set(cubeStateKey, stateNodes.length - 1);
     }
     const get = (cubeState: RubiksCube): RubiksCube | undefined => {
-        const key = createRubiksCubeStateKey(cubeState);
+        const key = keyCreator(cubeState);
         return stateNodes[stateEdges.get(key) ?? -1];
     };
     const hasBeenVisited = (cubeState: RubiksCube) => get(cubeState) !== undefined;
@@ -56,5 +57,6 @@ export const visitedStatesHashTable = () => {
         add,
         get,
         hasBeenVisited,
+        states: stateNodes
     }
 }
