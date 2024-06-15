@@ -40,7 +40,7 @@ export const depthSearch = ({
             depth: depth - 1,
             possibleMoves
         });
-        if(result) return [...result, move]
+        if(result) return [move, ...result]
     }
     return undefined;
 }
