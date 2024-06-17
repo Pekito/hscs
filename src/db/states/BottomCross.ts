@@ -1,50 +1,61 @@
 import { RubiksCube, RubiksCubeMove } from "../../cube/Types";
 import { createRubiksCubeStateKey } from "../../solvers/Utils";
-import { createBottomCrossStateKey } from "../../state-generators/bottomCross";
+import { createBottomCrossStateKey, findEveryBottomCrossState } from "../../state-generators/bottomCross";
+import { BOTTOM_CROSS_STATES_TABLE } from "../constants";
+import { SQLiteModule } from "../database";
 
-type BottomCrossRow = {
-    bottomCrossState: string;
-    cube_state: string;
-    solved: boolean;
-    optimal_solution: string;
-    depth: number;
+const createStatesTable = async (db: SQLiteModule) => {
+    await db.run(`DROP TABLE IF EXISTS ${BOTTOM_CROSS_STATES_TABLE}`)
+    await db.run(`CREATE TABLE IF NOT EXISTS ${BOTTOM_CROSS_STATES_TABLE} 
+        (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            edges_position VARCHAR(12) NOT NULL UNIQUE,
+            cube_state CHAR(54) NOT NULL,
+            optimal_solution VARCHAR(30),
+            depth INTEGER
+        )`);
 }
-type BottomCrossState = {
-    bottomCrossState: number[];
-    cube: RubiksCube;
-    solved: boolean;
-    optimal_solution: string;
-    depth: number;
-}
-const createRow = (params: {
-    cube: RubiksCube
-}) => {
-    const row: BottomCrossRow = {
-        bottomCrossState: createBottomCrossStateKey(params.cube),
-        cube_state: createRubiksCubeStateKey(params.cube),
-        solved: false,
-        optimal_solution: "",
-        depth: -1
+const populateStatesTable = async (db: SQLiteModule) => {
+    console.log("[Populate Bottom Cross States] Generating States");
+    const crossStates = findEveryBottomCrossState();
+    console.log("[Populate Bottom Cross States] Finished Generating");
+    console.log("[Populate Bottom Cross States] Inserting on database");
+
+    const batchSize = 1000;
+    const totalBatches = Math.ceil(crossStates.length / batchSize);
+
+    for (let batchIndex = 0; batchIndex < totalBatches; batchIndex++) {
+        const batchStart = batchIndex * batchSize;
+        const batchEnd = Math.min(batchStart + batchSize, crossStates.length);
+        const batch = crossStates.slice(batchStart, batchEnd);
+
+        const values = batch.map(state => [
+            state.stateKey,
+            createRubiksCubeStateKey(state.state),
+            state.solution,
+            state.depth
+        ]);
+
+        const placeholders = values.map(() => '(?, ?, ?, ?)').join(', ');
+        const statement = `INSERT INTO ${BOTTOM_CROSS_STATES_TABLE} (
+            edges_position,
+            cube_state,
+            optimal_solution,
+            depth
+        ) VALUES ${placeholders}`;
+
+        const flattenedValues = values.flat();
+
+        try {
+            await db.run(statement, flattenedValues);
+        } catch (error) {
+            console.error(`Error inserting batch ${batchIndex}: `, error);
+        }
     }
-}
-const solveRow = (params: {
-    bottomCrossState: RubiksCube,
-    solution: RubiksCubeMove[]
-}) => {
-    const stateKey = createBottomCrossStateKey(params.bottomCrossState);
-    `
-        UPDATE
-            cross_states
-        SET
-            solved = true,
-            optimal_solution = $1,
-            depth: $2
-        WHERE
-            bottomCrossState = $3
-    `;
 
+    console.log("[Populate Bottom Cross States] Finished inserting into database");
+};
+export default {
+    populateStatesTable,
+    createStatesTable
 }
-export {
-    createRow,
-    solveRow
-} 

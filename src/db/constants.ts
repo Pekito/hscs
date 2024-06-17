@@ -1,0 +1,1 @@
+export const BOTTOM_CROSS_STATES_TABLE = "bottom_cross_states";

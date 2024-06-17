@@ -7,20 +7,21 @@ type stateNodeIndex = number;
 export type CubeStateGraph = {
     add: (moves: RubiksCubeMove[], cubeState: RubiksCube) => void,
     get: (moves: RubiksCubeMove[]) => RubiksCube | undefined,
+    hasStateBeenVisited: (state: RubiksCube) => boolean
     stateNodes: RubiksCube[],
     stateEdges: Map<RubiksCubeMoveNotationSequence, stateNodeIndex>,
     statePositionEdges: Map<RubiksCubeStateKey, stateNodeIndex>,
     getSolution: (state: RubiksCube) => RubiksCubeMove[] | undefined,
     stateSolutionEdges: Map<RubiksCubeStateKey, RubiksCubeMove[]>
 }
-export const createCubeStateGraph = (): CubeStateGraph => {
+export const createCubeStateGraph = (stateKeyCreator: StateHashTableKeyCreator = createRubiksCubeStateKey): CubeStateGraph => {
     const stateNodes: RubiksCube[] = [];
     const stateEdges = new Map<RubiksCubeMoveNotationSequence, stateNodeIndex>();
     const statePositionEdges = new Map<RubiksCubeStateKey, stateNodeIndex>();
     const stateSolutionEdges = new Map<RubiksCubeStateKey, RubiksCubeMove[]>();
     const add = (moves: RubiksCubeMove[], cubeState: RubiksCube) => {
         const moveKey = createRubiksCubeMoveSequenceKey(moves)
-        const cubeStateKey = createRubiksCubeStateKey(cubeState);
+        const cubeStateKey = stateKeyCreator(cubeState);
         const cubeStateIndex = statePositionEdges.get(cubeStateKey);
         stateSolutionEdges.set(cubeStateKey, moves);
         if(cubeStateIndex !== undefined) {
@@ -34,11 +35,12 @@ export const createCubeStateGraph = (): CubeStateGraph => {
         
     }
     const getSolution = (state: RubiksCube) => {
-        return stateSolutionEdges.get(createRubiksCubeStateKey(state));
+        return stateSolutionEdges.get(stateKeyCreator(state));
     }
     const get = (moves: RubiksCubeMove[]): RubiksCube | undefined => {
         return stateNodes[stateEdges.get(createRubiksCubeMoveSequenceKey(moves)) ?? -1]
     };
+    const hasStateBeenVisited = (state: RubiksCube) => stateNodes[statePositionEdges.get(stateKeyCreator(state)) ?? -1] !== undefined;
     return {
         add,
         get,
@@ -46,7 +48,8 @@ export const createCubeStateGraph = (): CubeStateGraph => {
         stateNodes,
         stateEdges,
         statePositionEdges,
-        stateSolutionEdges
+        stateSolutionEdges,
+        hasStateBeenVisited
     }
 }
 

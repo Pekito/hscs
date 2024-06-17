@@ -2,9 +2,10 @@ import { isBottomCrossSolved } from "../analyzers/CommonAnalyzers";
 import { moveCube } from "../cube/Cube";
 import { LAYER_MOVES_ARRAY } from "../cube/moves";
 import { RubiksCube, RubiksCubeMove } from "../cube/Types";
+import { range } from "../Utils";
 import { createCubeStateGraph, CubeStateGraph, StateHashTableKeyCreator, visitedStatesHashTable } from "./DataStructures";
 import { DepthSearchSolutionParams, iterativeDepthSearchSolution } from "./SearchAlgorithms";
-import { createRubiksCubeStateKey } from "./Utils";
+import { createRubiksCubeMoveSequenceKey, createRubiksCubeStateKey } from "./Utils";
 
 export const findOptimalSequence = (params: DepthSearchSolutionParams) => {
     const solution = iterativeDepthSearchSolution(params);
@@ -24,19 +25,19 @@ export const findOptimalBottomCross = ({cube, possibleMoves = LAYER_MOVES_ARRAY,
     return solution
 };
 
-type stateFinder = {
+type StateFinder = {
     cubeStateNode: RubiksCube, 
     maxDepth: number, 
     possibleMoves: RubiksCubeMove[],
-    hashTableKeyCreator: StateHashTableKeyCreator 
+    stateKeyCreator: StateHashTableKeyCreator 
 }
 export const findStates = ({
     cubeStateNode: rootCubeState, 
     maxDepth, 
     possibleMoves, 
-    hashTableKeyCreator = createRubiksCubeStateKey
-}: stateFinder): RubiksCube[] => {
-    const visited = visitedStatesHashTable(hashTableKeyCreator);
+    stateKeyCreator = createRubiksCubeStateKey
+}: StateFinder): RubiksCube[] => {
+    const visited = visitedStatesHashTable(stateKeyCreator);
     const stack: { cubeStateNode: RubiksCube, depth: number }[] = [];
 
     stack.push({ cubeStateNode: rootCubeState, depth: 0 });
@@ -61,3 +62,41 @@ export const findStates = ({
 
     return visited.states;
 };
+export const findStatesWithOptimalSolution = (params: StateFinder) => {
+    const visited = createCubeStateGraph(params.stateKeyCreator);
+    const stack: { cubeStateNode: RubiksCube, depth: number, movesToGet: RubiksCubeMove[] }[] = [];
+
+    stack.push({ cubeStateNode: params.cubeStateNode, depth: 0, movesToGet: [] });
+
+    while (stack.length > 0) {
+        const { cubeStateNode, depth, movesToGet } = stack.pop()!;
+
+        if (depth > params.maxDepth) continue;
+
+        visited.add(movesToGet, cubeStateNode);
+
+        if (depth < params.maxDepth) {
+            params.possibleMoves.forEach(move => {
+                const newCube = moveCube(cubeStateNode, move);
+                const newMoves = [...movesToGet, move];
+                const currentSolution = visited.getSolution(newCube)
+                const isNewSolutionBetter = currentSolution ? currentSolution.length > newMoves.length : true;
+                if (isNewSolutionBetter) {
+                    stack.push({ cubeStateNode: newCube, depth: depth + 1, movesToGet: newMoves });
+                }
+            });
+        }
+    }
+
+    const solutions = visited.stateNodes.map((state) => {
+        const solution = visited.getSolution(state)!;
+        return {
+            stateKey: params.stateKeyCreator(state),
+            state: state,
+            solution: createRubiksCubeMoveSequenceKey(solution),
+            depth: solution.length
+        }
+    });
+
+    return solutions;
+}
