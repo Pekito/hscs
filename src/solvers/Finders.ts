@@ -1,6 +1,6 @@
 import { isBottomCrossSolved } from "../analyzers/CommonAnalyzers";
 import { moveCube } from "../cube/Cube";
-import { LAYER_MOVES_ARRAY } from "../cube/moves";
+import { LAYER_MOVES_ARRAY, mirrorSequence } from "../cube/moves";
 import { RubiksCube, RubiksCubeMove } from "../cube/Types";
 import { range } from "../Utils";
 import { createCubeStateGraph, CubeStateGraph, StateHashTableKeyCreator, visitedStatesHashTable } from "./DataStructures";
@@ -73,7 +73,7 @@ export const findStatesWithOptimalSolution = (params: StateFinder) => {
 
         if (depth > params.maxDepth) continue;
 
-        visited.add(movesToGet, cubeStateNode);
+        visited.add(mirrorSequence(movesToGet), cubeStateNode);
 
         if (depth < params.maxDepth) {
             params.possibleMoves.forEach(move => {

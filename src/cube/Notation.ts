@@ -13,7 +13,7 @@ export const notationToLayerIndexMap: Record<string, number> = Object.freeze({
 });
 
 //TODO: https://stackoverflow.com/questions/66993264/what-does-the-as-const-mean-in-typescript-and-what-is-its-use-case
-const notationToMoveMap: Record<string, RubiksCubeMove> = Object.freeze({
+export const notationToMoveMap: Record<string, RubiksCubeMove> = Object.freeze({
     "U": U_CLOCKWISE_MOVE,
     "U'": U_COUNTER_CLOCKWISE_MOVE,
     "U2": U_DOUBLE_MOVE,
