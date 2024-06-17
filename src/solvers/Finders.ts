@@ -2,7 +2,7 @@ import { isBottomCrossSolved } from "../analyzers/CommonAnalyzers";
 import { moveCube } from "../cube/Cube";
 import { LAYER_MOVES_ARRAY } from "../cube/moves";
 import { RubiksCube, RubiksCubeMove } from "../cube/Types";
-import { StateHashTableKeyCreator, visitedStatesHashTable } from "./DataStructures";
+import { createCubeStateGraph, CubeStateGraph, StateHashTableKeyCreator, visitedStatesHashTable } from "./DataStructures";
 import { DepthSearchSolutionParams, iterativeDepthSearchSolution } from "./SearchAlgorithms";
 import { createRubiksCubeStateKey } from "./Utils";
 
@@ -11,13 +11,18 @@ export const findOptimalSequence = (params: DepthSearchSolutionParams) => {
     return solution;
 }
 
-type searchBottomCrossParams = {cube: RubiksCube, possibleMoves?: RubiksCubeMove[]}
-export const findOptimalBottomCross = ({cube, possibleMoves = LAYER_MOVES_ARRAY}: searchBottomCrossParams) => iterativeDepthSearchSolution({
-    condition: isBottomCrossSolved,
-    cubeStateNode: cube,
-    possibleMoves: possibleMoves,
-    depth: 10,
-});
+type searchBottomCrossParams = {cube: RubiksCube, possibleMoves?: RubiksCubeMove[], sharedGraph: CubeStateGraph}
+export const findOptimalBottomCross = ({cube, possibleMoves = LAYER_MOVES_ARRAY, sharedGraph}: searchBottomCrossParams) => {
+    const solution = iterativeDepthSearchSolution({
+        condition: isBottomCrossSolved,
+        cubeStateNode: cube,
+        possibleMoves: possibleMoves,
+        depth: 10,
+        cubeStateGraph: sharedGraph
+    });
+
+    return solution
+};
 
 type stateFinder = {
     cubeStateNode: RubiksCube, 

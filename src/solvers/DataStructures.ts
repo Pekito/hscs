@@ -4,15 +4,25 @@ import { RubiksCubeMoveNotationSequence, RubiksCubeStateKey } from "./Types";
 import { createRubiksCubeMoveSequenceKey, createRubiksCubeStateKey } from "./Utils";
 
 type stateNodeIndex = number;
-
-export const cubeStateGraph = () => {
+export type CubeStateGraph = {
+    add: (moves: RubiksCubeMove[], cubeState: RubiksCube) => void,
+    get: (moves: RubiksCubeMove[]) => RubiksCube | undefined,
+    stateNodes: RubiksCube[],
+    stateEdges: Map<RubiksCubeMoveNotationSequence, stateNodeIndex>,
+    statePositionEdges: Map<RubiksCubeStateKey, stateNodeIndex>,
+    getSolution: (state: RubiksCube) => RubiksCubeMove[] | undefined,
+    stateSolutionEdges: Map<RubiksCubeStateKey, RubiksCubeMove[]>
+}
+export const createCubeStateGraph = (): CubeStateGraph => {
     const stateNodes: RubiksCube[] = [];
     const stateEdges = new Map<RubiksCubeMoveNotationSequence, stateNodeIndex>();
     const statePositionEdges = new Map<RubiksCubeStateKey, stateNodeIndex>();
+    const stateSolutionEdges = new Map<RubiksCubeStateKey, RubiksCubeMove[]>();
     const add = (moves: RubiksCubeMove[], cubeState: RubiksCube) => {
         const moveKey = createRubiksCubeMoveSequenceKey(moves)
         const cubeStateKey = createRubiksCubeStateKey(cubeState);
         const cubeStateIndex = statePositionEdges.get(cubeStateKey);
+        stateSolutionEdges.set(cubeStateKey, moves);
         if(cubeStateIndex !== undefined) {
             stateEdges.set(moveKey, cubeStateIndex);
             statePositionEdges.set(cubeStateKey, cubeStateIndex);
@@ -21,6 +31,10 @@ export const cubeStateGraph = () => {
         stateNodes.push(cubeState);
         stateEdges.set(moveKey, stateNodes.length - 1);
         statePositionEdges.set(cubeStateKey, stateNodes.length - 1);
+        
+    }
+    const getSolution = (state: RubiksCube) => {
+        return stateSolutionEdges.get(createRubiksCubeStateKey(state));
     }
     const get = (moves: RubiksCubeMove[]): RubiksCube | undefined => {
         return stateNodes[stateEdges.get(createRubiksCubeMoveSequenceKey(moves)) ?? -1]
@@ -28,9 +42,11 @@ export const cubeStateGraph = () => {
     return {
         add,
         get,
+        getSolution,
         stateNodes,
         stateEdges,
-        statePositionEdges
+        statePositionEdges,
+        stateSolutionEdges
     }
 }
 
