@@ -1,30 +1,7 @@
+import { createCube } from "../Cube";
 import { RubiksCubeMove, RubiksCubeLayerMoveGroup } from "../Types";
 
-export const UNCHANGED_MOVE: RubiksCubeMove = [
-    0, 1, 2, // U
-    3, 4, 5, 
-    6, 7, 8,
-
-    9, 10, 11, // L
-    12, 13, 14,
-    15, 16, 17,
-
-    18, 19, 20, // F
-    21, 22, 23,
-    24, 25, 26,
-
-    27, 28, 29, // R
-    30, 31, 32,
-    33, 34, 35,
-
-    36, 37, 38, // B
-    39, 40, 41,
-    42, 43, 44,
-
-    45, 46, 47, // D
-    48, 49, 50,
-    51, 52, 53
-];
+export const UNCHANGED_MOVE: RubiksCubeMove = createCube();
 
 export const U_CLOCKWISE_MOVE: RubiksCubeMove = [
     6, 3, 0, //U
@@ -216,9 +193,9 @@ export const F_COUNTER_CLOCKWISE_MOVE: RubiksCubeMove = [
     19, 22, 25,
     18, 21, 24,
 
-    45, 28, 29, // R
+    47, 28, 29, // R
     46, 31, 32,
-    47, 34, 35,
+    45, 34, 35,
 
     36, 37, 38, // B
     39, 40, 41,
