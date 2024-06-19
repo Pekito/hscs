@@ -107,7 +107,7 @@ describe("moveCube", () => {
     });
     it("Should double slices correctly", () => {
         expect(createCubeState([M_DOUBLE_MOVE, E_DOUBLE_MOVE, S_DOUBLE_MOVE])).toEqual(createCubeState([R_DOUBLE_MOVE, L_DOUBLE_MOVE, F_DOUBLE_MOVE, B_DOUBLE_MOVE, U_DOUBLE_MOVE, D_DOUBLE_MOVE]))
-    })
+    });
 });
  
 describe("getCenter", () => {

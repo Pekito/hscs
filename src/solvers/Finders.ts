@@ -1,8 +1,7 @@
-import { isBottomCrossSolved } from "../analyzers/CommonAnalyzers";
 import { moveCube } from "../cube/Cube";
-import { LAYER_MOVES_ARRAY, mirrorSequence } from "../cube/moves";
+import { mirrorSequence } from "../cube/moves";
 import { RubiksCube, RubiksCubeMove } from "../cube/Types";
-import { range } from "../Utils";
+import database from "../db/database";
 import { createCubeStateGraph, CubeStateGraph, StateHashTableKeyCreator, visitedStatesHashTable } from "./DataStructures";
 import { DepthSearchSolutionParams, iterativeDepthSearchSolution } from "./SearchAlgorithms";
 import { createRubiksCubeMoveSequenceKey, createRubiksCubeStateKey } from "./Utils";
@@ -12,56 +11,12 @@ export const findOptimalSequence = (params: DepthSearchSolutionParams) => {
     return solution;
 }
 
-type searchBottomCrossParams = {cube: RubiksCube, possibleMoves?: RubiksCubeMove[], sharedGraph: CubeStateGraph}
-export const findOptimalBottomCross = ({cube, possibleMoves = LAYER_MOVES_ARRAY, sharedGraph}: searchBottomCrossParams) => {
-    const solution = iterativeDepthSearchSolution({
-        condition: isBottomCrossSolved,
-        cubeStateNode: cube,
-        possibleMoves: possibleMoves,
-        depth: 10,
-        cubeStateGraph: sharedGraph
-    });
-
-    return solution
-};
-
 type StateFinder = {
     cubeStateNode: RubiksCube, 
     maxDepth: number, 
     possibleMoves: RubiksCubeMove[],
     stateKeyCreator: StateHashTableKeyCreator 
 }
-export const findStates = ({
-    cubeStateNode: rootCubeState, 
-    maxDepth, 
-    possibleMoves, 
-    stateKeyCreator = createRubiksCubeStateKey
-}: StateFinder): RubiksCube[] => {
-    const visited = visitedStatesHashTable(stateKeyCreator);
-    const stack: { cubeStateNode: RubiksCube, depth: number }[] = [];
-
-    stack.push({ cubeStateNode: rootCubeState, depth: 0 });
-
-    while (stack.length > 0) {
-        const { cubeStateNode, depth } = stack.pop()!;
-        
-        if (depth > maxDepth || visited.hasBeenVisited(cubeStateNode)) continue;
-        
-        visited.add(cubeStateNode);
-
-        const newStates = possibleMoves
-            .map(move => moveCube(cubeStateNode, move))
-            .filter(newState => !visited.hasBeenVisited(newState));
-
-        if (depth < maxDepth) {
-            newStates.forEach(newState => {
-                stack.push({ cubeStateNode: newState, depth: depth + 1 });
-            });
-        }
-    }
-
-    return visited.states;
-};
 export const findStatesWithOptimalSolution = (params: StateFinder) => {
     const visited = createCubeStateGraph(params.stateKeyCreator);
     const stack: { cubeStateNode: RubiksCube, depth: number, movesToGet: RubiksCubeMove[] }[] = [];

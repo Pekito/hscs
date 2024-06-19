@@ -8,6 +8,7 @@ export const getColoredCube = (scheme: CubeScheme, cube: RubiksCube) => {
       return cube.map((_, index) => getIndexColor(scheme, cube[index]));
 }
 export const print2DCube = (cube: UnidimensionalCube<any>) => {
+    console.log("[------------------------------------------------------]")
     console.log("           " + cube.slice(0, 3).join(" "));
     console.log("           " + cube.slice(3, 6).join(" "));
     console.log("           " + cube.slice(6, 9).join(" "));
@@ -19,6 +20,7 @@ export const print2DCube = (cube: UnidimensionalCube<any>) => {
     console.log("           " + cube.slice(45, 48).join(" "));
     console.log("           " + cube.slice(48, 51).join(" "));
     console.log("           " + cube.slice(51, 54).join(" "));
+    console.log("[------------------------------------------------------]")
 }
 export const wcaCube = (cube: RubiksCube) => getColoredCube(WCA_COLOR_SCHEME, cube)
 export const printWCACube = (cube: RubiksCube) => print2DCube(wcaCube(cube));

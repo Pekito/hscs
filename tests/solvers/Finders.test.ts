@@ -38,4 +38,7 @@ describe("findOptimalSequence", () => {
         });
         expect(sequence!.length).toEqual(3);
     });
+});
+
+describe("findOptimalBottomCross", () => {
 })

@@ -1,12 +1,13 @@
+import { mapNotationArrayToMove } from "../../cube/Notation";
 import { RubiksCube, RubiksCubeMove } from "../../cube/Types";
 import { createRubiksCubeStateKey } from "../../solvers/Utils";
-import { createBottomCrossStateKey, findEveryBottomCrossState } from "../../state-generators/bottomCross";
+import { createBottomCrossStateKey, findEveryBottomCrossState } from "../../state-generators/BottomCross";
 import { BOTTOM_CROSS_STATES_TABLE } from "../constants";
-import { SQLiteModule } from "../database";
+import database, { SQLiteModule } from "../database";
 
-const createStatesTable = async (db: SQLiteModule) => {
-    await db.run(`DROP TABLE IF EXISTS ${BOTTOM_CROSS_STATES_TABLE}`)
-    await db.run(`CREATE TABLE IF NOT EXISTS ${BOTTOM_CROSS_STATES_TABLE} 
+const createStatesTable = async () => {
+    database.run(`DROP TABLE IF EXISTS ${BOTTOM_CROSS_STATES_TABLE}`)
+    database.run(`CREATE TABLE IF NOT EXISTS ${BOTTOM_CROSS_STATES_TABLE} 
         (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             edges_position VARCHAR(12) NOT NULL UNIQUE,
@@ -15,7 +16,7 @@ const createStatesTable = async (db: SQLiteModule) => {
             depth INTEGER
         )`);
 }
-const populateStatesTable = async (db: SQLiteModule) => {
+const populateStatesTable = async () => {
     console.log("[Populate Bottom Cross States] Generating States");
     const crossStates = findEveryBottomCrossState();
     console.log("[Populate Bottom Cross States] Finished Generating");
@@ -47,7 +48,7 @@ const populateStatesTable = async (db: SQLiteModule) => {
         const flattenedValues = values.flat();
 
         try {
-            await db.run(statement, flattenedValues);
+            database.run(statement, flattenedValues);
         } catch (error) {
             console.error(`Error inserting batch ${batchIndex}: `, error);
         }
@@ -55,7 +56,23 @@ const populateStatesTable = async (db: SQLiteModule) => {
 
     console.log("[Populate Bottom Cross States] Finished inserting into database");
 };
+export type BottomCrossData = {
+    optimalSolution: RubiksCubeMove[],
+    depth: number
+}
+const getSolution = (cube: RubiksCube) => {
+    const result = database.query(`
+        SELECT 
+            optimal_solution, depth 
+        FROM 
+            ${BOTTOM_CROSS_STATES_TABLE}
+        WHERE
+            edges_position = ?
+        `,[createBottomCrossStateKey(cube)]);
+    return mapNotationArrayToMove(result[0].optimal_solution);
+}
 export default {
     populateStatesTable,
-    createStatesTable
+    createStatesTable,
+    getSolution
 }

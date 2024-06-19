@@ -1,12 +1,9 @@
-import database from "../database";
 import BottomCross from "../states/BottomCross";
 
 (async () => {
-    const db = database.connectionPool;
     console.log("Creating Tables");
-    await BottomCross.createStatesTable(db);
+     BottomCross.createStatesTable();
     console.log("Populating Tables");
-    await BottomCross.populateStatesTable(db);
-
+     BottomCross.populateStatesTable();
     console.log("Finished :)")
 })();

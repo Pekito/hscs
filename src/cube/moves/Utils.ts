@@ -1,5 +1,5 @@
 import { areArraysEqual } from "../../Utils";
-import { CENTER_INDEXES_ARRAY, NUMBER_OF_STICKERS_ON_CUBE } from "../Constants";
+import { NUMBER_OF_STICKERS_ON_CUBE } from "../Constants";
 import { getNotationFromMove, notationToMoveMap } from "../Notation";
 import { RubiksCubeLayerMoveGroup, RubiksCubeMove } from "../Types";
 

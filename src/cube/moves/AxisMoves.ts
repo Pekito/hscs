@@ -193,3 +193,10 @@ export const AXIS_MOVES: Record<string, RubiksCubeLayerMoveGroup> = {
         DOUBLE: Z_DOUBLE_MOVE,
     }
 }
+
+export const AXIS_MOVES_ARRAY = Object.values(AXIS_MOVES)
+.flatMap(moveGroup => [
+    moveGroup.CLOCKWISE,
+    moveGroup.COUNTER_CLOCKWISE,
+    moveGroup.DOUBLE
+]);

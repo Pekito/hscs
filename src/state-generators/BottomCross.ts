@@ -4,10 +4,13 @@ import { LAYER_MOVES_ARRAY } from "../cube/moves";
 import { RubiksCube } from "../cube/Types";
 import { createWriteSolutionLine, loadStateHashTable, StateHashTable } from "../db/utils";
 import { createCubeStateGraph, StateHashTableKeyCreator } from "../solvers/DataStructures";
-import { findOptimalBottomCross, findStates, findStatesWithOptimalSolution } from "../solvers/Finders";
+import { findStatesWithOptimalSolution } from "../solvers/Finders";
 import { createRubiksCubeMoveSequenceKey } from "../solvers/Utils";
+import { SOLVED_STATES_TABLE, createSolvedStateKey } from "./SolvedState";
+
 export const createBottomCrossStateKey: StateHashTableKeyCreator = (cube: RubiksCube) => {
-    const keyIndexes = Y_AXIS_BOTTOM_EDGE_STICKERS.map(index => cube.findIndex((sticker) => sticker === index));
+    const orientation = SOLVED_STATES_TABLE[createSolvedStateKey(cube)];
+    const keyIndexes = Y_AXIS_BOTTOM_EDGE_STICKERS.map(index => cube.findIndex((sticker) => sticker === orientation[index]));
     return keyIndexes.join(",");
 }
 export const findEveryBottomCrossState = () => findStatesWithOptimalSolution({

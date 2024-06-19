@@ -1,46 +1,28 @@
-import * as sqlite from 'better-sqlite-pool';
+import sqlite from 'better-sqlite3';
 import path from 'path';
-
 interface QueryResult {
     [key: string]: any;
   }
   
   export interface SQLiteModule {
-    query: (sql: string, params?: any[]) => Promise<QueryResult[]>;
-    close: () => Promise<void>;
-    run: (sql: string, params?: any[]) => Promise<void>
+    query: (sql: string, params?: any[]) => QueryResult[];
+    run: (sql: string, params?: any[]) => void;
   }
   
   const createSQLiteModule = (databasePath: string): SQLiteModule => {
-    const pool = new sqlite.Pool(databasePath);
-    const run = async (sql: string, params: any[] = []): Promise<void> => {
-        const connection = await pool.acquire();
-        try {
-          const statement = connection.prepare(sql);
+    const db = sqlite(databasePath);
+    const run = (sql: string, params: any[] = []): void => {
+          const statement = db.prepare(sql);
           statement.run(params);
-        } finally {
-          connection.release();
-        }
-      };
-    const query = async (sql: string, params: any[] = []): Promise<QueryResult[]> => {
-      const connection = await pool.acquire();
-      try {
-        const statement = connection.prepare(sql);
+    };
+    const query = (sql: string, params: any[] = []) => {
+        const statement = db.prepare(sql);
         const results = statement.all(params);
         return results as QueryResult[];
-      } finally {
-        connection.release();
-      }
     };
   
-    const close = async (): Promise<void> => {
-        pool.close();
-    };
-  
-    return { query, close, run };
+    return { query, run };
   };
 
-  const connectionPool = createSQLiteModule(path.join(__dirname, "..", "..", "hscs.sqlite"));
-  export default {
-    connectionPool
-  };
+  const db = createSQLiteModule(path.join(__dirname, "..", "..", "hscs.sqlite"));
+  export default db;

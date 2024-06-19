@@ -45,3 +45,5 @@ export function chunkObject<T>(obj: {[key: string]: T}, numberOfChunks: number):
 
     return result;
 }
+
+export const reverseString = (str: string) => [...str].reverse().join("");
