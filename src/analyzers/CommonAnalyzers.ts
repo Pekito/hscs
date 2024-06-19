@@ -1,6 +1,7 @@
-import { BOTTOM_EDGE_STICKER_INDEX, CENTER_FACE_INDEX, D_LAYER_INDEX, EDGES_STICKER_INDEXES, FACE_INDEX_ARRAY, Y_AXIS_LAYERS } from "../cube/Constants";
+import { BOTTOM_EDGE_STICKER_INDEX, CENTER_FACE_INDEX, D_LAYER_INDEX, EDGES_STICKER_INDEXES, FACE_INDEX_ARRAY, Y_AXIS_BOTTOM_EDGE_STICKERS, Y_AXIS_LAYERS } from "../cube/Constants";
 import { getCenterIndex, getFace } from "../cube/Cube";
 import { RubiksCube, RubiksCubeFace } from "../cube/Types";
+import { getSolvedCubeOrientation } from "../state-generators/SolvedState";
 
 export const isFaceSolved = (faceIndex: number, cube: RubiksCube): boolean => {
     const face = getFace(faceIndex, cube);
@@ -19,8 +20,6 @@ export const areFaceEdgesSolved = (face: RubiksCubeFace): boolean => EDGES_STICK
     return isHorizontalSolved || isVerticalSolved;
 });
 export const isBottomCrossSolved = (cube: RubiksCube) => {
-    const isBottomEdgeStickerSolved = (faceIndex: number) => getCenterIndex(getFace(faceIndex, cube)) + 3 === getFace(faceIndex, cube)[BOTTOM_EDGE_STICKER_INDEX];
-    const areBottomEdgesSolved = Y_AXIS_LAYERS.every(isBottomEdgeStickerSolved);
-    const areDLayerEdgesSolved = areFaceEdgesSolved(getFace(D_LAYER_INDEX, cube));
-    return areBottomEdgesSolved && areDLayerEdgesSolved;
+    const orientation = getSolvedCubeOrientation(cube);
+    return Y_AXIS_BOTTOM_EDGE_STICKERS.every(bottomEdgeIndex => cube[bottomEdgeIndex] === orientation[bottomEdgeIndex]);
 }

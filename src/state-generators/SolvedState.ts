@@ -19,3 +19,4 @@ export const SOLVED_STATES_TABLE = SOLVED_STATES.reduce((obj, currentValue) => {
     obj[currentValue.stateKey] = currentValue.state;
     return obj;
 }, {} as Record<string, RubiksCube>)
+export const getSolvedCubeOrientation = (cube: RubiksCube) => SOLVED_STATES_TABLE[createSolvedStateKey(cube)];
