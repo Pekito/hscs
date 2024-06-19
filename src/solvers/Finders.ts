@@ -1,5 +1,6 @@
-import { moveCube } from "../cube/Cube";
-import { mirrorSequence } from "../cube/moves";
+import { createCubeState, moveCube } from "../cube/Cube";
+import { reverseSequence } from "../cube/moves";
+import { getNotationFromMove } from "../cube/Notation";
 import { RubiksCube, RubiksCubeMove } from "../cube/Types";
 import database from "../db/database";
 import { createCubeStateGraph, CubeStateGraph, StateHashTableKeyCreator, visitedStatesHashTable } from "./DataStructures";
@@ -14,26 +15,26 @@ export const findOptimalSequence = (params: DepthSearchSolutionParams) => {
 type StateFinder = {
     cubeStateNode: RubiksCube, 
     maxDepth: number, 
-    possibleMoves: RubiksCubeMove[],
-    stateKeyCreator: StateHashTableKeyCreator 
+    possibleMoves: Array<RubiksCubeMove | RubiksCubeMove[]>,
+    stateKeyCreator: StateHashTableKeyCreator,
 }
 export const findStatesWithOptimalSolution = (params: StateFinder) => {
+
     const visited = createCubeStateGraph(params.stateKeyCreator);
     const stack: { cubeStateNode: RubiksCube, depth: number, movesToGet: RubiksCubeMove[] }[] = [];
 
     stack.push({ cubeStateNode: params.cubeStateNode, depth: 0, movesToGet: [] });
-
     while (stack.length > 0) {
         const { cubeStateNode, depth, movesToGet } = stack.pop()!;
-
         if (depth > params.maxDepth) continue;
 
-        visited.add(mirrorSequence(movesToGet), cubeStateNode);
+        visited.add(reverseSequence(movesToGet), cubeStateNode);
 
         if (depth < params.maxDepth) {
             params.possibleMoves.forEach(move => {
-                const newCube = moveCube(cubeStateNode, move);
-                const newMoves = [...movesToGet, move];
+                const moves = (Array.isArray(move[0]) ? move : [move]) as RubiksCubeMove[];
+                const newCube = createCubeState(moves, cubeStateNode);
+                const newMoves = [...movesToGet, ...moves];
                 const currentSolution = visited.getSolution(newCube)
                 const isNewSolutionBetter = currentSolution ? currentSolution.length > newMoves.length : true;
                 if (isNewSolutionBetter) {
@@ -43,15 +44,16 @@ export const findStatesWithOptimalSolution = (params: StateFinder) => {
         }
     }
 
-    const solutions = visited.stateNodes.map((state) => {
-        const solution = visited.getSolution(state)!;
-        return {
-            stateKey: params.stateKeyCreator(state),
-            state: state,
-            solution: createRubiksCubeMoveSequenceKey(solution),
-            depth: solution.length
-        }
-    });
+    const solutions = visited.stateNodes
+        .map((state) => {
+            const solution = visited.getSolution(state)!;
+            return {
+                stateKey: params.stateKeyCreator(state),
+                state: state,
+                solution: createRubiksCubeMoveSequenceKey(solution),
+                depth: solution.length
+            }
+        });
 
     return solutions;
 }
