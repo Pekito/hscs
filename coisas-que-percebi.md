@@ -22,3 +22,8 @@ R = x(z')
 B = f(x')
 D = f(x2)
 ```
+
+#2 Movimentos espelhados
+
+1. Um movimento espelhado no eixo horizontal é a aplicação da fórmula f(n) = y2 n' y2
+2. Um movimento espelhado no eixo vertical é a aplicação da fórmula de f(n) sob y2, logo f(m) = y2 f(n)(m) y2
