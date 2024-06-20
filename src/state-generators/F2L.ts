@@ -60,7 +60,7 @@ const todasPescasF = getAllSequenceMirrors(pescaF);
 const todasInsercoesF = getAllSequenceMirrors(insercaoF);
 const todasMeiaLuaR = getAllSequenceMirrors(meiaLuaR);
 const todasMeiaLuaF = getAllSequenceMirrors(meiaLuaF);
-export const FRONT_RIGHT_F2L_FREE_SLOTS = () =>
+export const FRONT_RIGHT_F2L_FREE_SLOT_STATES = () =>
   findStatesWithOptimalSolution({
     cubeStateNode: createCube(),
     maxDepth: 4,
@@ -103,7 +103,7 @@ export const FRONT_RIGHT_F2L_FL_SOLVED_STATES = () => {
     stateKeyCreator: createFrontRightF2LStateKey,
   });
 };
-export const FRONT_RIGHT_F2L_BL_FL_SOLVED_STATES = () => {
+export const FRONT_RIGHT_F2L_FL_BL_SOLVED_STATES = () => {
     const getAvailableSequences = (sequence: MoveSequence) => {
       return [
         sequence,
@@ -128,7 +128,7 @@ export const FRONT_RIGHT_F2L_BL_FL_SOLVED_STATES = () => {
       stateKeyCreator: createFrontRightF2LStateKey,
     });
 };
-export const FRONT_RIGHT_F2L_NO_FREE_SLOT = () => {
+export const FRONT_RIGHT_F2L_NO_FREE_SLOT_STATES = () => {
   return findStatesWithOptimalSolution({
     cubeStateNode: createCube(),
     maxDepth: 4,
@@ -146,3 +146,53 @@ export const FRONT_RIGHT_F2L_NO_FREE_SLOT = () => {
     stateKeyCreator: createFrontRightF2LStateKey,
   });
 };
+export const FRONT_RIGHT_F2L_BL_BR_SOLVED_STATES = () => {
+  const getAvailableSequences = (sequence: MoveSequence) => {
+    return [
+      sequence,
+      mirrorSequenceInXAxis(sequence),
+    ];
+  };
+
+  return findStatesWithOptimalSolution({
+    cubeStateNode: createCube(),
+    maxDepth: 4,
+    possibleMoves: [
+      U_CLOCKWISE_MOVE,
+      U_DOUBLE_MOVE,
+      U_COUNTER_CLOCKWISE_MOVE,
+      ...getAvailableSequences(pesca),
+      ...getAvailableSequences(pescaF),
+      ...getAvailableSequences(insercao),
+      ...getAvailableSequences(insercaoF),
+      ...getAvailableSequences(meiaLuaR),
+      ...getAvailableSequences(meiaLuaF),
+    ],
+    stateKeyCreator: createFrontRightF2LStateKey,
+  });
+}
+export const FRONT_RIGHT_F2L_FL_BR_SOLVED_STATES = () => {
+  const getAvailableSequences = (sequence: MoveSequence) => {
+    return [
+      sequence,
+      mirrorSequenceInZXAxis(sequence),
+    ];
+  };
+
+  return findStatesWithOptimalSolution({
+    cubeStateNode: createCube(),
+    maxDepth: 4,
+    possibleMoves: [
+      U_CLOCKWISE_MOVE,
+      U_DOUBLE_MOVE,
+      U_COUNTER_CLOCKWISE_MOVE,
+      ...getAvailableSequences(pesca),
+      ...getAvailableSequences(pescaF),
+      ...getAvailableSequences(insercao),
+      ...getAvailableSequences(insercaoF),
+      ...getAvailableSequences(meiaLuaR),
+      ...getAvailableSequences(meiaLuaF),
+    ],
+    stateKeyCreator: createFrontRightF2LStateKey,
+  });
+}

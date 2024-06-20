@@ -18,7 +18,13 @@ type StateFinder = {
     possibleMoves: Array<RubiksCubeMove | RubiksCubeMove[]>,
     stateKeyCreator: StateHashTableKeyCreator,
 }
-export const findStatesWithOptimalSolution = (params: StateFinder) => {
+export type StateFinderResult = {
+    stateKey: string;
+    state: RubiksCube;
+    solution: string;
+    depth: number;
+}[]
+export const findStatesWithOptimalSolution = (params: StateFinder): StateFinderResult => {
 
     const visited = createCubeStateGraph(params.stateKeyCreator);
     const stack: { cubeStateNode: RubiksCube, depth: number, movesToGet: RubiksCubeMove[] }[] = [];
