@@ -6,6 +6,7 @@ export type ColoredRubiksCube = UnidimensionalCube<string>;
 export type RubiksCubeFaceNotation = "U" | "L" | "F" | "R" | "B" | "D";
 export type RubiskCubePieceNotation = { 0: string, length: 2 } & RubiksCubeFaceNotation;
 export type RubiksCubeMove = UnidimensionalCube<number>;
+export type MoveSequence = RubiksCubeMove[];
 export type RubiksCubeLayerMoveGroup = {
     CLOCKWISE: RubiksCubeMove
     COUNTER_CLOCKWISE: RubiksCubeMove

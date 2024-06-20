@@ -1,5 +1,5 @@
 import { createCubeState, moveCube } from "../cube/Cube";
-import { reverseSequence } from "../cube/moves";
+import { removeRedundantMoves, reverseSequence } from "../cube/moves";
 import { getNotationFromMove } from "../cube/Notation";
 import { RubiksCube, RubiksCubeMove } from "../cube/Types";
 import database from "../db/database";
@@ -47,11 +47,12 @@ export const findStatesWithOptimalSolution = (params: StateFinder) => {
     const solutions = visited.stateNodes
         .map((state) => {
             const solution = visited.getSolution(state)!;
+            const optimizedSolution = removeRedundantMoves(solution);
             return {
                 stateKey: params.stateKeyCreator(state),
                 state: state,
-                solution: createRubiksCubeMoveSequenceKey(solution),
-                depth: solution.length
+                solution: createRubiksCubeMoveSequenceKey(optimizedSolution),
+                depth: optimizedSolution.length
             }
         });
 
