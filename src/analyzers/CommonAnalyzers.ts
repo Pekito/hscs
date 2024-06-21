@@ -19,19 +19,3 @@ export const areFaceEdgesSolved = (face: RubiksCubeFace): boolean => EDGES_STICK
     const isVerticalSolved = Math.abs(face[CENTER_FACE_INDEX] - face[edgeIndex]) === 3;
     return isHorizontalSolved || isVerticalSolved;
 });
-export const isBottomCrossSolved = (cube: RubiksCube) => {
-    const orientation = getSolvedCubeOrientation(cube);
-    return Y_AXIS_BOTTOM_EDGE_STICKERS.every(bottomEdgeIndex => cube[bottomEdgeIndex] === orientation[bottomEdgeIndex]);
-}
-type F2LPair = "FL" | "FR" | "BR" | "BL";
-export const isF2LPairSolved = (cube: RubiksCube, pair: F2LPair): boolean | Error=> {
-    if(!isBottomCrossSolved(cube)) return new Error("cross_not_solved");
-    const getRelativeOrientationIndex = createGetRelativeOrientationIndex(cube);
-    const f2lPairIndexes: Record<F2LPair, number[]> = {
-        FL: [21,24],
-        FR: [23,26],
-        BR: [39,42],
-        BL: [41,44]
-    };
-    return f2lPairIndexes[pair].every(f2lPairIndex => cube[f2lPairIndex] === getRelativeOrientationIndex(f2lPairIndex));
-}

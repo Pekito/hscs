@@ -12,7 +12,7 @@ export const findOptimalSequence = (params: DepthSearchSolutionParams) => {
     return solution;
 }
 
-type StateFinder = {
+export type StateFinder = {
     cubeStateNode: RubiksCube, 
     maxDepth: number, 
     possibleMoves: Array<RubiksCubeMove | RubiksCubeMove[]>,

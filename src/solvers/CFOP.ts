@@ -1,4 +1,3 @@
-import { isBottomCrossSolved, isF2LPairSolved } from "../analyzers/CommonAnalyzers";
 import { createCube, createCubeState } from "../cube/Cube";
 import { RubiksCube } from "../cube/Types";
 import F2LDB from "../db/states/F2L";
@@ -6,6 +5,7 @@ import { F2L_FR_BLOCKED_BL_BR_STATES_TABLE, F2L_FR_BLOCKED_BL_STATES_TABLE, F2L_
 import BottomCross from "../db/states/BottomCross";
 import { Y_CLOCKWISE_MOVE } from "../cube/moves";
 import { printWCACube } from "../visualizers/PrintCube";
+import CFOPAnalyzer from "../analyzers/CFOPAnalyzer";
 
 type F2LState = {
     flSolved: boolean; 
@@ -15,10 +15,10 @@ type F2LState = {
 }
 const createF2LState = (cube: RubiksCube): F2LState => {
     return {
-        flSolved: isF2LPairSolved(cube, "FL") as boolean,
-        frSolved: isF2LPairSolved(cube, "FR") as boolean,
-        brSolved: isF2LPairSolved(cube, "BR") as boolean,
-        blSolved: isF2LPairSolved(cube, "BL") as boolean,
+        flSolved: CFOPAnalyzer.isF2LPairSolved(cube, "FL") as boolean,
+        frSolved: CFOPAnalyzer.isF2LPairSolved(cube, "FR") as boolean,
+        brSolved: CFOPAnalyzer.isF2LPairSolved(cube, "BR") as boolean,
+        blSolved: CFOPAnalyzer.isF2LPairSolved(cube, "BL") as boolean,
     }
 }
 const getUnsolvedF2LTable = (f2lState: F2LState): string => {
