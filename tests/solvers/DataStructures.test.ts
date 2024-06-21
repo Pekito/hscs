@@ -2,11 +2,11 @@ import { expect, test } from "vitest";
 import { createCube, moveCube } from "../../src/cube/Cube";
 import { U_CLOCKWISE_MOVE } from "../../src/cube/moves";
 import { RubiksCubeMove } from "../../src/cube/Types";
-import { cubeStateGraph } from "../../src/solvers/DataStructures";
+import { createCubeStateGraph } from "../../src/solvers/DataStructures";
 
 
 test("Should point to the same index", () => {
-  const graph = cubeStateGraph();
+  const graph = createCubeStateGraph();
   let cube = createCube();
   const appliedMoves: RubiksCubeMove[] = [];
   for (const move of [
@@ -21,7 +21,8 @@ test("Should point to the same index", () => {
     appliedMoves.push(move);
     graph.add(appliedMoves, cube);
   }
-  expect(graph.stateEdges.get("U")).toEqual(graph.stateEdges.get("UUUUU"));
+  console.log(graph.stateEdges)
+  expect(graph.stateEdges.get("U")).toEqual(graph.stateEdges.get("U U U U U"));
 });
 
 
