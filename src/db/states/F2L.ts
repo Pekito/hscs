@@ -1,11 +1,7 @@
-import { mapNotationArrayToMove } from "../../cube/Notation";
+import { mapNotationSequenceToMoveSequence } from "../../cube/Notation";
 import { RubiksCube, RubiksCubeMove } from "../../cube/Types";
 import { StateFinderResult } from "../../solvers/Finders";
 import { createRubiksCubeStateKey } from "../../solvers/Utils";
-import {
-  createBottomCrossStateKey,
-  findEveryBottomCrossState,
-} from "../../state-generators/BottomCross";
 import {
   FRONT_RIGHT_F2L_BL_BR_SOLVED_STATES,
   FRONT_RIGHT_F2L_FL_BL_SOLVED_STATES,
@@ -14,6 +10,7 @@ import {
   FRONT_RIGHT_F2L_FREE_SLOT_STATES,
   FRONT_RIGHT_F2L_NO_FREE_SLOT_STATES,
 } from "../../state-generators/F2L";
+import { getSolvedCubeOrientation } from "../../state-generators/SolvedState";
 import {
   F2L_FR_BLOCKED_BL_BR_STATES_TABLE,
   F2L_FR_BLOCKED_FL_BL_STATES_TABLE,

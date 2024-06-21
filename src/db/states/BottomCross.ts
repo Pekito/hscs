@@ -1,4 +1,4 @@
-import { mapNotationArrayToMove } from "../../cube/Notation";
+import { mapNotationSequenceToMoveSequence } from "../../cube/Notation";
 import { RubiksCube, RubiksCubeMove } from "../../cube/Types";
 import { createRubiksCubeStateKey } from "../../solvers/Utils";
 import { createBottomCrossStateKey, findEveryBottomCrossState } from "../../state-generators/BottomCross";
@@ -69,7 +69,8 @@ const getSolution = (cube: RubiksCube) => {
         WHERE
             edges_position = ?
         `,[createBottomCrossStateKey(cube)]);
-    return mapNotationArrayToMove(result[0].optimal_solution);
+        const sequence = mapNotationSequenceToMoveSequence(result[0].optimal_solution);
+    return sequence
 }
 export default {
     populateStatesTable,
