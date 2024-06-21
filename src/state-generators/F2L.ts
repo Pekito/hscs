@@ -103,6 +103,58 @@ export const FRONT_RIGHT_F2L_FL_SOLVED_STATES = () => {
     stateKeyCreator: createFrontRightF2LStateKey,
   });
 };
+export const FRONT_RIGHT_F2L_BL_SOLVED_STATES = () => {
+  const getAvailableSequences = (sequence: MoveSequence) => {
+    return [
+      sequence,
+      mirrorSequenceInZAxis(sequence),
+      mirrorSequenceInXAxis(sequence),
+    ];
+  };
+
+  return findStatesWithOptimalSolution({
+    cubeStateNode: createCube(),
+    maxDepth: 4,
+    possibleMoves: [
+      U_CLOCKWISE_MOVE,
+      U_DOUBLE_MOVE,
+      U_COUNTER_CLOCKWISE_MOVE,
+      ...getAvailableSequences(pesca),
+      ...getAvailableSequences(pescaF),
+      ...getAvailableSequences(insercao),
+      ...getAvailableSequences(insercaoF),
+      ...getAvailableSequences(meiaLuaR),
+      ...getAvailableSequences(meiaLuaF),
+    ],
+    stateKeyCreator: createFrontRightF2LStateKey,
+  });
+};
+export const FRONT_RIGHT_F2L_BR_SOLVED_STATES = () => {
+  const getAvailableSequences = (sequence: MoveSequence) => {
+    return [
+      sequence,
+      mirrorSequenceInZXAxis(sequence),
+      mirrorSequenceInXAxis(sequence),
+    ];
+  };
+
+  return findStatesWithOptimalSolution({
+    cubeStateNode: createCube(),
+    maxDepth: 4,
+    possibleMoves: [
+      U_CLOCKWISE_MOVE,
+      U_DOUBLE_MOVE,
+      U_COUNTER_CLOCKWISE_MOVE,
+      ...getAvailableSequences(pesca),
+      ...getAvailableSequences(pescaF),
+      ...getAvailableSequences(insercao),
+      ...getAvailableSequences(insercaoF),
+      ...getAvailableSequences(meiaLuaR),
+      ...getAvailableSequences(meiaLuaF),
+    ],
+    stateKeyCreator: createFrontRightF2LStateKey,
+  });
+};
 export const FRONT_RIGHT_F2L_FL_BL_SOLVED_STATES = () => {
     const getAvailableSequences = (sequence: MoveSequence) => {
       return [
