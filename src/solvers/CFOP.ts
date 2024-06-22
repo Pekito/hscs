@@ -7,6 +7,7 @@ import { Y_CLOCKWISE_MOVE } from "../cube/moves";
 import { printWCACube } from "../visualizers/PrintCube";
 import CFOPAnalyzer from "../analyzers/CFOPAnalyzer";
 import OLL from "../db/states/OLL";
+import PLL from "../db/states/PLL";
 
 type F2LState = {
     flSolved: boolean; 
@@ -49,16 +50,38 @@ const solveF2L = (cube:RubiksCube): MoveSequence => {
     }
     return solveF2LPair(cube);
 }
-const solveCube = (cube: RubiksCube): MoveSequence => {
+const solveCube = (cube: RubiksCube): {
+    crossSolution: MoveSequence,
+    f2lSolution: MoveSequence,
+    ollSolution: MoveSequence,
+    pllSolution: MoveSequence,
+    completeSolution: MoveSequence,
+} => {
     const crossSolution = BottomCross.getSolution(cube);
     const crossSolved = createCubeState(crossSolution, cube);
-    const f2lSolved = solveF2L(crossSolved);
-    const ollSolution = OLL.getSolution(createCubeState([...crossSolution, ...f2lSolved], cube));
-    return [
-        ...crossSolution,
-        ...f2lSolved,
-        ...ollSolution
-    ]
+    const f2lSolution = solveF2L(crossSolved);
+    const f2lSolvedCube = createCubeState([...crossSolution, ...f2lSolution], cube)
+    const ollSolution = OLL.getSolution(f2lSolvedCube);
+    const ollSolvedCube = createCubeState(ollSolution, f2lSolvedCube);
+    const pllSolution = PLL.getSolution(ollSolvedCube);
+    printWCACube(crossSolved, "Cruz Resolvida");
+    console.log("\n")
+    printWCACube(f2lSolvedCube, "F2L Resolvido");
+    console.log("\n")
+    printWCACube(ollSolvedCube, "OLL Resolvida");
+    console.log("\n")
+    return {
+        crossSolution,
+        f2lSolution,
+        ollSolution,
+        pllSolution,
+        completeSolution: [
+            ...crossSolution,
+            ...f2lSolution,
+            ...ollSolution,
+            ...pllSolution
+        ]
+    }
 }
 
 export default {

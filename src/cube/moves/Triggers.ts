@@ -10,3 +10,6 @@ export const SEXY_MOVE = mapNotationSequenceToMoveSequence("R U R' U'");
 export const HEDGE = reverseSequence(SLEDGE);
 export const SUNE = mapNotationSequenceToMoveSequence("R U R' U R U2 R'");
 export const ANTISUNE = reverseSequence(SUNE);
+export const JBPerm = mapNotationSequenceToMoveSequence("R U R' F' R U R' U' R' F R2 U' R' U'");
+export const UaPerm = mapNotationSequenceToMoveSequence("M2 U M U2 M' U M2");
+export const UbPerm = mapNotationSequenceToMoveSequence("M2 U' M U2 M' U' M2");
