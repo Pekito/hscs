@@ -12,13 +12,15 @@ import { joinMovesBySpaces } from "../visualizers/PrintMove";
 import { createGetRelativeOrientationIndex, getSolvedCubeOrientation } from "./SolvedState";
 import { Console } from "console";
 import { createRubiksCubeMoveSequenceKey } from "../solvers/Utils";
-export const printOLLKey = (key: any[]) => {
+export const printOLLKey = (key: any[] | string) => {
+    if(typeof key === 'string') key = key.split(",");
+    console.log("[------------- OLL Key --------------]")
     console.log("           " + key.slice(0, 3).join(" "));
     console.log("           " + key.slice(3, 6).join(" "));
     console.log("           " + key.slice(6, 9).join(" "));
     console.log("");
     console.log("    " + key.slice(9, 12).join(" ") + "  " + key.slice(12, 15).join(" ") + "  " + key.slice(15, 18).join(" ") + "  " + key.slice(18, 21).join(" "));
-    console.log("");
+    console.log("[------------- OLL Key ---------------]");
 }
 export const OLLKeyCreator = (cube: RubiksCube) => {
     const getRelativeIndex = createGetRelativeOrientationIndex(cube);
