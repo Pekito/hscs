@@ -45,3 +45,7 @@ export const getLayerEndIndex = (faceIndex: number) => getLayerStartIndex(faceIn
 export const getFace = (faceIndex: number, cube: RubiksCube): RubiksCubeFace => cube.slice(getLayerStartIndex(faceIndex), getLayerEndIndex(faceIndex));
 export const getCenterIndex = (face: RubiksCubeFace): number => face[CENTER_FACE_INDEX];
 export const getFaceEdge = (face: RubiksCubeFace, edgePosition: number): number => face[edgePosition];
+export const isIndexFromFace = (index: number, faceIndex: number) => {
+    const center = getLayerStartIndex(faceIndex) + CENTER_FACE_INDEX;
+    return index >= center - CENTER_FACE_INDEX && index <= center + CENTER_FACE_INDEX;
+}

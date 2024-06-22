@@ -1,11 +1,11 @@
 import { CubeScheme, WCA_COLOR_SCHEME } from "../cube/Schemes";
 import { RubiksCube, UnidimensionalCube } from "../cube/Types";
-const getIndexColor = (scheme: CubeScheme, index: number) => {
+export const getIndexColor = (index: number, scheme: CubeScheme = WCA_COLOR_SCHEME) => {
     const faceIndex = Math.floor(index / 9);
     return scheme[faceIndex];
 }
-export const getColoredCube = (scheme: CubeScheme, cube: RubiksCube) => {
-      return cube.map((_, index) => getIndexColor(scheme, cube[index]));
+export const getColoredCube = (cube: RubiksCube, scheme: CubeScheme, ) => {
+      return cube.map((_, index) => getIndexColor(cube[index]), scheme);
 }
 export const print2DCube = (cube: UnidimensionalCube<any>, identifier: string = "") => {
     console.log(`[---------------------------${identifier}---------------------------]`)
@@ -22,5 +22,5 @@ export const print2DCube = (cube: UnidimensionalCube<any>, identifier: string = 
     console.log("           " + cube.slice(51, 54).join(" "));
     console.log(`[---------------------------${identifier}---------------------------]`)
 }
-export const wcaCube = (cube: RubiksCube) => getColoredCube(WCA_COLOR_SCHEME, cube)
+export const wcaCube = (cube: RubiksCube) => getColoredCube(cube, WCA_COLOR_SCHEME)
 export const printWCACube = (cube: RubiksCube, identifier: string = "") => print2DCube(wcaCube(cube), identifier);

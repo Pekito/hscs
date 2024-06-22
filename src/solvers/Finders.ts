@@ -1,11 +1,14 @@
+import { Console } from "console";
 import { createCubeState, moveCube } from "../cube/Cube";
 import { removeRedundantMoves, reverseSequence } from "../cube/moves";
 import { getNotationFromMove } from "../cube/Notation";
-import { RubiksCube, RubiksCubeMove } from "../cube/Types";
+import { MoveSequence, RubiksCube, RubiksCubeMove } from "../cube/Types";
 import database from "../db/database";
+import { printWCACube } from "../visualizers/PrintCube";
 import { createCubeStateGraph, CubeStateGraph, StateHashTableKeyCreator, visitedStatesHashTable } from "./DataStructures";
 import { DepthSearchSolutionParams, iterativeDepthSearchSolution } from "./SearchAlgorithms";
 import { createRubiksCubeMoveSequenceKey, createRubiksCubeStateKey } from "./Utils";
+import { joinMovesBySpaces } from "../visualizers/PrintMove";
 
 export const findOptimalSequence = (params: DepthSearchSolutionParams) => {
     const solution = iterativeDepthSearchSolution(params);
@@ -23,6 +26,7 @@ export type StateFinderResult = {
     state: RubiksCube;
     solution: string;
     depth: number;
+    solutionMoves: MoveSequence
 }[]
 export const findStatesWithOptimalSolution = (params: StateFinder): StateFinderResult => {
 
@@ -33,7 +37,6 @@ export const findStatesWithOptimalSolution = (params: StateFinder): StateFinderR
     while (stack.length > 0) {
         const { cubeStateNode, depth, movesToGet } = stack.pop()!;
         if (depth > params.maxDepth) continue;
-
         visited.add(reverseSequence(movesToGet), cubeStateNode);
 
         if (depth < params.maxDepth) {
@@ -58,7 +61,8 @@ export const findStatesWithOptimalSolution = (params: StateFinder): StateFinderR
                 stateKey: params.stateKeyCreator(state),
                 state: state,
                 solution: createRubiksCubeMoveSequenceKey(optimizedSolution),
-                depth: optimizedSolution.length
+                depth: optimizedSolution.length,
+                solutionMoves: optimizedSolution
             }
         });
 
