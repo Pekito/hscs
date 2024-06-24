@@ -1,16 +1,11 @@
-import { reverse } from "dns";
-import CFOPAnalyzer from "../analyzers/CFOPAnalyzer";
 import { U_LAYER_INDEX } from "../cube/Constants";
-import { createCube, createCubeState, getFace, isIndexFromFace } from "../cube/Cube";
-import { F_CLOCKWISE_MOVE, F_COUNTER_CLOCKWISE_MOVE, reverseSequence, U_CLOCKWISE_MOVE, U_COUNTER_CLOCKWISE_MOVE, U_DOUBLE_MOVE, Z_DOUBLE_MOVE } from "../cube/moves";
-import { ANTISUNE, HEDGE, INSERCAO, MEIA_LUA, PESCA, SEXY_MOVE, SLEDGE, SUNE } from "../cube/moves/Triggers";
+import { createCube, isIndexFromFace } from "../cube/Cube";
+import { F_CLOCKWISE_MOVE, F_COUNTER_CLOCKWISE_MOVE, reverseSequence, U_CLOCKWISE_MOVE, U_COUNTER_CLOCKWISE_MOVE, U_DOUBLE_MOVE } from "../cube/moves";
+import { ANTISUNE, SEXY_MOVE, SLEDGE, SUNE } from "../cube/moves/Triggers";
 import { parseNotationSequenceToMoveSequence } from "../cube/Notation";
 import { RubiksCube } from "../cube/Types";
 import { findStatesWithOptimalSolution, StateFinder } from "../solvers/Finders";
-import { getIndexColor, print2DCube, printWCACube } from "../visualizers/PrintCube";
-import { joinMovesBySpaces } from "../visualizers/PrintMove";
-import { createGetRelativeOrientationIndex, getSolvedCubeOrientation } from "./SolvedState";
-import { Console } from "console";
+import { createGetRelativeOrientationIndex } from "./SolvedState";
 import { createRubiksCubeMoveSequenceKey } from "../solvers/Utils";
 export const printOLLKey = (key: any[] | string) => {
     if(typeof key === 'string') key = key.split(",");
@@ -37,15 +32,15 @@ export const OLLKeyCreator = (cube: RubiksCube) => {
 
         36,37,38, // B Face
     ]
-    const relativeTargetIndexes = targetIndexes.map(topFaceIndex => {
-        const relativeIndex = getRelativeIndex(topFaceIndex);
-        return relativeIndex;
+    const cubeIndexes = targetIndexes.map(targetIndex => {
+        const cubeIndex = cube[targetIndex];
+        return getRelativeIndex(cubeIndex);
     });
-    const cubeIndexes = relativeTargetIndexes.map(relativeTargetIndex => cube[relativeTargetIndex]);
     const uFaceColors = cubeIndexes.map(idx => {
         const color = isIndexFromFace(idx, U_LAYER_INDEX) ? "0" : "-";
         return color;
     });
+    printOLLKey(cubeIndexes);
     return uFaceColors.join(",");
 }
 const BASE_OLLS = [
