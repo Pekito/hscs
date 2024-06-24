@@ -19,7 +19,7 @@ import {
 } from "../cube/moves";
 import {
   mapMoveArrayToNotation,
-  mapNotationSequenceToMoveSequence,
+  parseNotationSequenceToMoveSequence,
 } from "../cube/Notation";
 import { MoveSequence, RubiksCube } from "../cube/Types";
 import { StateHashTableKeyCreator } from "../solvers/DataStructures";

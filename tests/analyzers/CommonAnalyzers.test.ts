@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { createCube, createCubeState, moveCube } from "../../src/cube/Cube";
 import { isCubeSolved} from "../../src/analyzers/CommonAnalyzers";
-import { applySequence, mapNotationSequenceToMoveSequence } from "../../src/cube/Notation";
+import { applySequence, parseNotationSequenceToMoveSequence } from "../../src/cube/Notation";
 import { RubiksCube } from "../../src/cube/Types";
 import { Z_CLOCKWISE_MOVE, R_CLOCKWISE_MOVE, U_CLOCKWISE_MOVE } from "../../src/cube/moves";
 

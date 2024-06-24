@@ -1,4 +1,4 @@
-import { mapNotationSequenceToMoveSequence } from "../../cube/Notation";
+import { parseNotationSequenceToMoveSequence } from "../../cube/Notation";
 import { RubiksCube, RubiksCubeMove } from "../../cube/Types";
 import { StateFinderResult } from "../../solvers/Finders";
 import { createRubiksCubeStateKey } from "../../solvers/Utils";
@@ -98,7 +98,7 @@ const getSolution = (cube: RubiksCube, table: string) => {
       WHERE
           edges_position = ?
       `,[createFrontRightF2LStateKey(cube)]);
-      const sequence = mapNotationSequenceToMoveSequence(result[0].optimal_solution);
+      const sequence = parseNotationSequenceToMoveSequence(result[0].optimal_solution);
   return sequence
 }
 export default {

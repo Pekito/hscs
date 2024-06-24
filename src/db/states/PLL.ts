@@ -1,4 +1,4 @@
-import { mapNotationSequenceToMoveSequence } from "../../cube/Notation";
+import { parseNotationSequenceToMoveSequence } from "../../cube/Notation";
 import { RubiksCube } from "../../cube/Types";
 import { createRubiksCubeStateKey } from "../../solvers/Utils";
 import { PLL_STATES, PLLKeyCreator } from "../../state-generators/PLL";
@@ -56,7 +56,7 @@ const getSolution = (cube: RubiksCube) => {
       WHERE
           edges_position = ?
       `,[PLLKeyCreator(cube)]);
-      const sequence = mapNotationSequenceToMoveSequence(result[0].optimal_solution);
+      const sequence = parseNotationSequenceToMoveSequence(result[0].optimal_solution);
   return sequence
 }
 export default {

@@ -16,7 +16,7 @@ import {
 import { areArraysEqual } from "../../src/Utils";
 import {
   getNotationFromMove,
-  mapNotationSequenceToMoveSequence,
+  parseNotationSequenceToMoveSequence,
 } from "../../src/cube/Notation";
 
 describe("areMovesMirrored", () => {
@@ -92,41 +92,41 @@ describe("mirroring", () => {
     it("Should mirror pesca R", () => {
       const pescaL = "L' U' L";
       expect(
-        mirrorSequenceInXAxis(mapNotationSequenceToMoveSequence(pescaR))
-      ).toEqual(mapNotationSequenceToMoveSequence(pescaL));
+        mirrorSequenceInXAxis(parseNotationSequenceToMoveSequence(pescaR))
+      ).toEqual(parseNotationSequenceToMoveSequence(pescaL));
     });
     it("Should mirror pesca FR", () => {
       const pescaFL = "F U F'";
       expect(
-        mirrorSequenceInXAxis(mapNotationSequenceToMoveSequence(pescaFR))
-      ).toEqual(mapNotationSequenceToMoveSequence(pescaFL));
+        mirrorSequenceInXAxis(parseNotationSequenceToMoveSequence(pescaFR))
+      ).toEqual(parseNotationSequenceToMoveSequence(pescaFL));
     });
     it("Should mirror pesca BR", () => {
       const pescaBL = "B' U' B";
       expect(
-        mirrorSequenceInXAxis(mapNotationSequenceToMoveSequence(pescaBR))
-      ).toEqual(mapNotationSequenceToMoveSequence(pescaBL));
+        mirrorSequenceInXAxis(parseNotationSequenceToMoveSequence(pescaBR))
+      ).toEqual(parseNotationSequenceToMoveSequence(pescaBL));
     });
   });
   describe("Z Axis (F | B", () => {
     it("Should mirror pesca R", () => {
         const pescaBR = "R' U' R";
         expect(
-          mirrorSequenceInZAxis(mapNotationSequenceToMoveSequence(pescaR))
-        ).toEqual(mapNotationSequenceToMoveSequence(pescaBR));
+          mirrorSequenceInZAxis(parseNotationSequenceToMoveSequence(pescaR))
+        ).toEqual(parseNotationSequenceToMoveSequence(pescaBR));
       });
       it("Should mirror pesca FR", () => {
         const pescaBBR = "B U B'";
         expect(
-            mirrorSequenceInZAxis(mapNotationSequenceToMoveSequence(pescaFR))
-        ).toEqual(mapNotationSequenceToMoveSequence(pescaBBR));
+            mirrorSequenceInZAxis(parseNotationSequenceToMoveSequence(pescaFR))
+        ).toEqual(parseNotationSequenceToMoveSequence(pescaBBR));
       });
       it("Should mirror pesca BL", () => {
         const pescaBL = "B' U' B";
         const pescaFL = "F U F'";
         expect(
-            mirrorSequenceInZAxis(mapNotationSequenceToMoveSequence(pescaBL))
-        ).toEqual(mapNotationSequenceToMoveSequence(pescaFL));
+            mirrorSequenceInZAxis(parseNotationSequenceToMoveSequence(pescaBL))
+        ).toEqual(parseNotationSequenceToMoveSequence(pescaFL));
       });
   })
 });

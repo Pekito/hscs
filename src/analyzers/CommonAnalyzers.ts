@@ -13,9 +13,3 @@ export const isFaceSolved = (faceIndex: number, cube: RubiksCube): boolean => {
 export const isCubeSolved = (cube: RubiksCube) => {
     return FACE_INDEX_ARRAY.every((faceIndex) => isFaceSolved(faceIndex, cube));
 }
-export const getFaceEdgesIndex = (face: RubiksCubeFace) => EDGES_STICKER_INDEXES.map(edgeIndex => face[edgeIndex]);
-export const areFaceEdgesSolved = (face: RubiksCubeFace): boolean => EDGES_STICKER_INDEXES.every(edgeIndex => {
-    const isHorizontalSolved = Math.abs(face[CENTER_FACE_INDEX] - face[edgeIndex]) === 1;
-    const isVerticalSolved = Math.abs(face[CENTER_FACE_INDEX] - face[edgeIndex]) === 3;
-    return isHorizontalSolved || isVerticalSolved;
-});

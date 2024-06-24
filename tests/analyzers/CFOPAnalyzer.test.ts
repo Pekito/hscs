@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { createCube, createCubeState } from "../../src/cube/Cube";
-import { applySequence, mapNotationSequenceToMoveSequence } from "../../src/cube/Notation";
+import { applySequence, parseNotationSequenceToMoveSequence } from "../../src/cube/Notation";
 import { RubiksCube } from "../../src/cube/Types";
 import CFOPAnalyzer from "../../src/analyzers/CFOPAnalyzer";
 describe("isBottomCrossSolved", () => {
@@ -15,40 +15,40 @@ describe("isBottomCrossSolved", () => {
 });
 describe("isF2LPairSolved", () => {
     it("Should return error if cross is not solved", () => {
-        const cube = createCubeState(mapNotationSequenceToMoveSequence("R"));
+        const cube = createCubeState(parseNotationSequenceToMoveSequence("R"));
         const error = CFOPAnalyzer.isF2LPairSolved(cube, "FR") as Error;
         expect(error.message).toEqual("cross_not_solved");
     });
     it("Should return any pair is solved", () => {
-        const cube = createCubeState(mapNotationSequenceToMoveSequence("R U R' L' U' L L U' L' R' U' R"));
+        const cube = createCubeState(parseNotationSequenceToMoveSequence("R U R' L' U' L L U' L' R' U' R"));
         expect(CFOPAnalyzer.isF2LPairSolved(cube, "BR")).toEqual(false);
         expect(CFOPAnalyzer.isF2LPairSolved(cube, "BL")).toEqual(false);
         expect(CFOPAnalyzer.isF2LPairSolved(cube, "FL")).toEqual(false);
         expect(CFOPAnalyzer.isF2LPairSolved(cube, "FR")).toEqual(false);
     });
     it("Should return every pair is solved but BR", () => {
-        const cube = createCubeState(mapNotationSequenceToMoveSequence("R' U2 R"));
+        const cube = createCubeState(parseNotationSequenceToMoveSequence("R' U2 R"));
         expect(CFOPAnalyzer.isF2LPairSolved(cube, "BR")).toEqual(false);
         expect(CFOPAnalyzer.isF2LPairSolved(cube, "BL")).toEqual(true);
         expect(CFOPAnalyzer.isF2LPairSolved(cube, "FL")).toEqual(true);
         expect(CFOPAnalyzer.isF2LPairSolved(cube, "FR")).toEqual(true);
     });
     it("Should return every pair is solved but BL", () => {
-        const cube = createCubeState(mapNotationSequenceToMoveSequence("L U2 L'"));
+        const cube = createCubeState(parseNotationSequenceToMoveSequence("L U2 L'"));
         expect(CFOPAnalyzer.isF2LPairSolved(cube, "BL")).toEqual(false);
         expect(CFOPAnalyzer.isF2LPairSolved(cube, "BR")).toEqual(true);
         expect(CFOPAnalyzer.isF2LPairSolved(cube, "FL")).toEqual(true);
         expect(CFOPAnalyzer.isF2LPairSolved(cube, "FR")).toEqual(true);
     });
     it("Should return every pair is solved but FL", () => {
-        const cube = createCubeState(mapNotationSequenceToMoveSequence("L' U2 L"));
+        const cube = createCubeState(parseNotationSequenceToMoveSequence("L' U2 L"));
         expect(CFOPAnalyzer.isF2LPairSolved(cube, "FL")).toEqual(false);
         expect(CFOPAnalyzer.isF2LPairSolved(cube, "BL")).toEqual(true);
         expect(CFOPAnalyzer.isF2LPairSolved(cube, "BR")).toEqual(true);
         expect(CFOPAnalyzer.isF2LPairSolved(cube, "FR")).toEqual(true);
     });
     it("Should return every pair is solved but FR", () => {
-        const cube = createCubeState(mapNotationSequenceToMoveSequence("R U2 R'"));
+        const cube = createCubeState(parseNotationSequenceToMoveSequence("R U2 R'"));
         expect(CFOPAnalyzer.isF2LPairSolved(cube, "FR")).toEqual(false);
         expect(CFOPAnalyzer.isF2LPairSolved(cube, "FL")).toEqual(true);
         expect(CFOPAnalyzer.isF2LPairSolved(cube, "BL")).toEqual(true);

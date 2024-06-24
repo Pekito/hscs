@@ -4,7 +4,7 @@ import { U_LAYER_INDEX } from "../cube/Constants";
 import { createCube, createCubeState, getFace, isIndexFromFace } from "../cube/Cube";
 import { F_CLOCKWISE_MOVE, F_COUNTER_CLOCKWISE_MOVE, reverseSequence, U_CLOCKWISE_MOVE, U_COUNTER_CLOCKWISE_MOVE, U_DOUBLE_MOVE, Z_DOUBLE_MOVE } from "../cube/moves";
 import { ANTISUNE, HEDGE, INSERCAO, MEIA_LUA, PESCA, SEXY_MOVE, SLEDGE, SUNE } from "../cube/moves/Triggers";
-import { mapNotationSequenceToMoveSequence } from "../cube/Notation";
+import { parseNotationSequenceToMoveSequence } from "../cube/Notation";
 import { RubiksCube } from "../cube/Types";
 import { findStatesWithOptimalSolution, StateFinder } from "../solvers/Finders";
 import { getIndexColor, print2DCube, printWCACube } from "../visualizers/PrintCube";
@@ -54,7 +54,7 @@ const BASE_OLLS = [
     ANTISUNE,
     [...SEXY_MOVE, ...SLEDGE],
     reverseSequence([...SEXY_MOVE, ...SLEDGE]),
-    mapNotationSequenceToMoveSequence("R U2 R2 F R F' R U2 R'")
+    parseNotationSequenceToMoveSequence("R U2 R2 F R F' R U2 R'")
 
 ]
 export const OLL_STATES = () => {

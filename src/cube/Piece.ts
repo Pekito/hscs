@@ -1,8 +1,8 @@
 import { range, reverseString } from "../Utils";
 import { B_LAYER_INDEX, BOTTOM_EDGE_STICKER_INDEX, F_LAYER_INDEX, LEFT_EDGE_STICKER_INDEX, RIGHT_EDGE_STICKER_INDEX, STICKERS_ON_FACE, TOP_EDGE_STICKER_INDEX, Y_AXIS_LAYERS } from "./Constants";
-import { createCubeState, getLayerStartIndex } from "./Cube";
+import { createCubeState, getFaceStartIndex } from "./Cube";
 import { AXIS_MOVES_ARRAY } from "./moves";
-const backTopEdge = getLayerStartIndex(B_LAYER_INDEX) + TOP_EDGE_STICKER_INDEX
+const backTopEdge = getFaceStartIndex(B_LAYER_INDEX) + TOP_EDGE_STICKER_INDEX
 const orientedEdgesMap = {
     UB: [1,37],
     UR: [5,28],

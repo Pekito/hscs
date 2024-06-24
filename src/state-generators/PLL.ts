@@ -2,7 +2,7 @@ import { U_LAYER_INDEX } from "../cube/Constants";
 import { isIndexFromFace, createCube } from "../cube/Cube";
 import { F_CLOCKWISE_MOVE, F_COUNTER_CLOCKWISE_MOVE, reverseSequence, U_CLOCKWISE_MOVE, U_COUNTER_CLOCKWISE_MOVE, U_DOUBLE_MOVE } from "../cube/moves";
 import { SEXY_MOVE, SUNE, ANTISUNE, SLEDGE, JBPerm, UaPerm, UbPerm } from "../cube/moves/Triggers";
-import { mapNotationSequenceToMoveSequence } from "../cube/Notation";
+import { parseNotationSequenceToMoveSequence } from "../cube/Notation";
 import { RubiksCube } from "../cube/Types";
 import { StateFinder, findStatesWithOptimalSolution } from "../solvers/Finders";
 import { createRubiksCubeMoveSequenceKey } from "../solvers/Utils";

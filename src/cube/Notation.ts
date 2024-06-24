@@ -56,7 +56,7 @@ const moveToNotation = Object.fromEntries(
 );
 export const getNotationFromMove = (move: RubiksCubeMove) => moveToNotation[JSON.stringify(move)];
 export const mapMoveArrayToNotation = (moves: RubiksCubeMove[]) => moves.map(getNotationFromMove);
-export const mapNotationSequenceToMoveSequence = (sequence: string) => sequence.split(" ").reduce((sequence, currentMove) => {
+export const parseNotationSequenceToMoveSequence = (sequence: string) => sequence.split(" ").reduce((sequence, currentMove) => {
     if(!currentMove) return sequence;
     return [...sequence, notationToMoveMap[currentMove]];
 }, [] as MoveSequence);
