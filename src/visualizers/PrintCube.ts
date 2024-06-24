@@ -20,7 +20,7 @@ export const print2DCube = (cube: UnidimensionalCube<any>, identifier: string = 
     console.log("           " + cube.slice(45, 48).join(" "));
     console.log("           " + cube.slice(48, 51).join(" "));
     console.log("           " + cube.slice(51, 54).join(" "));
-    console.log(`------------ ${identifier} ------------]`)
+    console.log(`-------- Fim ${identifier} ------------]`)
 }
 export const wcaCube = (cube: RubiksCube) => getColoredCube(cube, WCA_COLOR_SCHEME)
 export const printWCACube = (cube: RubiksCube, identifier: string = "") => print2DCube(wcaCube(cube), identifier);

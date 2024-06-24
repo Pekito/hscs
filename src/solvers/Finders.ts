@@ -6,12 +6,12 @@ import { MoveSequence, RubiksCube, RubiksCubeMove } from "../cube/Types";
 import database from "../db/database";
 import { printWCACube } from "../visualizers/PrintCube";
 import { createCubeStateGraph, CubeStateGraph, StateHashTableKeyCreator, visitedStatesHashTable } from "./DataStructures";
-import { DepthSearchSolutionParams, iterativeDepthSearchSolution } from "./SearchAlgorithms";
+import { DepthSearchSolutionParams, iterativeDepthFirstSearchSolution } from "./SearchAlgorithms";
 import { createRubiksCubeMoveSequenceKey, createRubiksCubeStateKey } from "./Utils";
 import { joinMovesBySpaces } from "../visualizers/PrintMove";
 
 export const findOptimalSequence = (params: DepthSearchSolutionParams) => {
-    const solution = iterativeDepthSearchSolution(params);
+    const solution = iterativeDepthFirstSearchSolution(params);
     return solution;
 }
 

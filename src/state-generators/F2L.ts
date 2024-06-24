@@ -24,7 +24,7 @@ import {
 import { MoveSequence, RubiksCube } from "../cube/Types";
 import { StateHashTableKeyCreator } from "../solvers/DataStructures";
 import { findStatesWithOptimalSolution } from "../solvers/Finders";
-import { iterativeDepthSearchSolution } from "../solvers/SearchAlgorithms";
+import { iterativeDepthFirstSearchSolution } from "../solvers/SearchAlgorithms";
 import { print2DCube, printWCACube } from "../visualizers/PrintCube";
 import { getSolvedCubeOrientation, SOLVED_STATES_TABLE } from "./SolvedState";
 import { joinMovesByArrows, joinMovesBySpaces } from "../visualizers/PrintMove";

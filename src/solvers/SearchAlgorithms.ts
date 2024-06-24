@@ -1,7 +1,9 @@
 import { moveCube } from "../cube/Cube";
-import { RubiksCube, RubiksCubeMove } from "../cube/Types";
+import { getNotationFromMove, mapMoveArrayToNotation } from "../cube/Notation";
+import { MoveSequence, RubiksCube, RubiksCubeMove } from "../cube/Types";
 import { range } from "../Utils";
-import { createCubeStateGraph, CubeStateGraph } from "./DataStructures";
+import { printWCACube } from "../visualizers/PrintCube";
+import { createCubeStateGraph, CubeStateGraph, Stack } from "./DataStructures";
 import { CubeCondition, RubiksCubeSolution } from "./Types";
 
 export type DepthSearchSolutionParams = {
@@ -11,12 +13,12 @@ export type DepthSearchSolutionParams = {
     possibleMoves: RubiksCubeMove[],
     cubeStateGraph?: CubeStateGraph
 }
-export const iterativeDepthSearchSolution = ({
+export const iterativeDepthFirstSearchSolution = ({
     condition, cubeStateNode, depth: maxDepth, possibleMoves, cubeStateGraph: cubeStateGraph = createCubeStateGraph() 
 }: DepthSearchSolutionParams): RubiksCubeSolution | undefined => {
     if(condition(cubeStateNode)) return [];
     for(const currentMaxDepth of range(maxDepth)) {
-        const result = depthSearchSolution({
+        const result = depthFirstSearchSolution({
             condition,
             depth: currentMaxDepth,
             cubeStateNode,
@@ -27,27 +29,36 @@ export const iterativeDepthSearchSolution = ({
     return undefined;
 }
 
-export const depthSearchSolution = ({
-    condition, cubeStateNode, depth, possibleMoves, cubeStateGraph: cubeStateGraph = createCubeStateGraph() 
+export const depthFirstSearchSolution = ({
+    condition, cubeStateNode, depth: maxDepth, possibleMoves, cubeStateGraph: cubeStateGraph = createCubeStateGraph() 
 }: DepthSearchSolutionParams): RubiksCubeSolution | undefined => {
-    if(depth === 0) {
-        if(condition(cubeStateNode)) return [];
-        else return undefined;
-    }
-    for(const move of possibleMoves) {
-        const child = moveCube(cubeStateNode, move);
-        const hasBeenSolutioned = cubeStateGraph.getSolution(child)
-        if(hasBeenSolutioned) return hasBeenSolutioned
-        const result = depthSearchSolution({
-            cubeStateNode: child,
-            condition,
-            depth: depth - 1,
-            possibleMoves
-        });
-        if(result) {
-            const solution = [move, ...result]
-            cubeStateGraph.add(solution, child)
-            return solution
+    type DepthSearchStackItem = {
+        state: RubiksCube,
+        depth: number,
+        sequenceToGet: MoveSequence
+    };
+    const stack = Stack<DepthSearchStackItem>();
+    stack.push({
+        state: cubeStateNode,
+        depth: 0,
+        sequenceToGet: []
+    })
+    while(!stack.isEmpty()) {
+        const {
+            state: currentState, 
+            depth: currentDepth, 
+            sequenceToGet: currentSequenceToGet
+        } = stack.pop();
+        if(condition(currentState)) { return currentSequenceToGet }
+        for(const move of possibleMoves) {
+            const newState = moveCube(currentState, move);
+            const newDepth = currentDepth + 1;
+            if(newDepth > maxDepth) continue;
+            stack.push({
+                state: newState,
+                depth: newDepth,
+                sequenceToGet: [...currentSequenceToGet, move]
+            });
         }
     }
     return undefined;
