@@ -79,3 +79,20 @@ export const visitedStatesHashTable = (keyCreator: StateHashTableKeyCreator) => 
         states: stateNodes
     }
 }
+
+type Stack<T> = {
+    push: (item: T) =>  void;
+    pop: () => T
+    isEmpty: () => boolean
+}
+export const Stack = <T>(): Stack<T> => {
+    const state :any = [];
+    const push = (cube: T) => state.push(cube);
+    const pop = () => state.pop();
+    const isEmpty = () => state.length === 0;
+    return {
+        push,
+        pop,
+        isEmpty
+    }
+}
