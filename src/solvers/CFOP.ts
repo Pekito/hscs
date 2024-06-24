@@ -64,12 +64,6 @@ const solveCube = (cube: RubiksCube): {
     const ollSolution = OLL.getSolution(f2lSolvedCube);
     const ollSolvedCube = createCubeState(ollSolution, f2lSolvedCube);
     const pllSolution = PLL.getSolution(ollSolvedCube);
-    printWCACube(crossSolved, "Cruz Resolvida");
-    console.log("\n")
-    printWCACube(f2lSolvedCube, "F2L Resolvido");
-    console.log("\n")
-    printWCACube(ollSolvedCube, "OLL Resolvida");
-    console.log("\n")
     return {
         crossSolution,
         f2lSolution,
