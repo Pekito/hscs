@@ -1,5 +1,5 @@
 # Human-Style Cube Solver
 
-Projeto pessoal onde estou desenvolvendo um solucionador de cubo mágico 3x3x3 que utiliza abordagens humanas para buscar soluções.
+Personal project to develop a 3x3x3 Rubik's Cube solver that uses "human approaches" to find solutions.
 
-Feito com TypeScript
+Built with TypeScript
