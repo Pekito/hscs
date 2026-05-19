@@ -25,12 +25,12 @@ export const reverseMove = (move: RubiksCubeMove) => {
 export const mirrorMoveInXAxis = (move: RubiksCubeMove): RubiksCubeMove => {
     if(isMoveFromZAxis(move)) return reverseMove(move);
     const mirroredMove = createCubeState([Y_DOUBLE_MOVE, reverseMove(move), Y_DOUBLE_MOVE]);
-    return mirroredMove;
+    return Array.from(mirroredMove);
 }
 export const mirrorMoveInZAxis = (move: RubiksCubeMove): RubiksCubeMove => {
     if(isMoveFromXAxis(move)) return reverseMove(move);
     const mirroredMove = createCubeState([Y_DOUBLE_MOVE, reverseMove(move), Y_DOUBLE_MOVE]);
-    return mirroredMove;
+    return Array.from(mirroredMove);
 }
 export const mirrorMoveInZXAxis = (move: RubiksCubeMove) => mirrorMoveInZAxis(mirrorMoveInXAxis(move));
 

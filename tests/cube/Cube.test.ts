@@ -5,7 +5,7 @@ import { R_CLOCKWISE_MOVE, B_CLOCKWISE_MOVE, F_DOUBLE_MOVE, U_CLOCKWISE_MOVE, R_
 import { createCubeState } from "../Utils";
 
 describe("getFace", () => {
-    const makeResult = (startingIndex: number) => Array.from({length: 9}, (_, i) => startingIndex + i);
+    const makeResult = (startingIndex: number) => Uint8Array.from({length: 9}, (_, i) => startingIndex + i);
     const solvedCube = createCube();
     it("Should return from 0 to 8 if selected face is U", () => {
         expect(getFace(U_LAYER_INDEX, solvedCube)).toEqual(makeResult(0))
@@ -52,13 +52,13 @@ describe("moveCube", () => {
             B_COUNTER_CLOCKWISE_MOVE
         ]);
     
-        expect(scrambledCube).toEqual([
+        expect(scrambledCube).toEqual(Uint8Array.from([
             9,  7, 18, 23,  4, 39, 20, 52, 17, 38, 30, 27,
            10, 13, 12, 35, 46, 26,  8, 43, 45, 41, 22, 16,
            33, 34, 36, 24, 32,  6, 48, 31, 14, 29,  1, 51,
            11, 19,  0, 21, 40,  3, 44,  5, 53, 47, 50,  2,
            25, 49, 37, 42, 28, 15
-         ])
+         ]))
     });
     it("Should z rotate properly", () => {
         const uMovedCube = moveCube(createCube(), U_CLOCKWISE_MOVE);

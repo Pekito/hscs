@@ -4,8 +4,8 @@ export const getIndexColor = (index: number, scheme: CubeScheme = WCA_COLOR_SCHE
     const faceIndex = Math.floor(index / 9);
     return scheme[faceIndex];
 }
-export const getColoredCube = (cube: RubiksCube, scheme: CubeScheme, ) => {
-      return cube.map((_, index) => getIndexColor(cube[index]), scheme);
+export const getColoredCube = (cube: RubiksCube, scheme: CubeScheme) => {
+      return Array.from(cube, (_, index) => getIndexColor(cube[index]));
 }
 export const print2DCube = (cube: UnidimensionalCube<any>, identifier: string = "") => {
     console.log(`[----------- ${identifier} ------------]`)

@@ -36,10 +36,10 @@ import { RubiksCube, RubiksCubeMove, RubiksCubeFace } from "./Types";
  */
 
 
-export const createCube = (): RubiksCube =>  Array.from({ length: NUMBER_OF_STICKERS_ON_CUBE }, (_, i) => i);
+export const createCube = (): RubiksCube => Uint8Array.from({ length: NUMBER_OF_STICKERS_ON_CUBE }, (_, i) => i);
 export const moveReducer = (cube: RubiksCube, move: RubiksCubeMove) => moveCube(cube, move);
 export const createCubeState = (moves: RubiksCubeMove[], cube: RubiksCube = createCube()): RubiksCube => moves.reduce(moveReducer, cube);
-export const moveCube = (cube: RubiksCube, move: RubiksCubeMove): RubiksCube => move.map((moveIndex) => cube[moveIndex]);
+export const moveCube = (cube: RubiksCube, move: RubiksCubeMove): RubiksCube => Uint8Array.from(move, (moveIndex) => cube[moveIndex]);
 export const getFaceStartIndex = (faceIndex: number) => faceIndex * STICKERS_ON_FACE;
 export const getFaceEndIndex = (faceIndex: number) => getFaceStartIndex(faceIndex) + STICKERS_ON_FACE;
 export const getFace = (faceIndex: number, cube: RubiksCube): RubiksCubeFace => cube.slice(getFaceStartIndex(faceIndex), getFaceEndIndex(faceIndex));
